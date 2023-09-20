@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo "Performing Git operations"
+      - git clone https://github.com/MyDry30/admin-portal.git
+      - cd app-test
+      - git remote add codecommit https://git-codecommit.us-west-1.amazonaws.com/v1/repos/mydry30-frontend
+      - git config credential.helper '!aws codecommit credential-helper $@'
+      - git config credential.UseHttpPath true
+      - git push codecommit master
+
+artifacts:
+  files: '**/*'
+
