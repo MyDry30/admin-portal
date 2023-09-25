@@ -5,7 +5,7 @@ phases:
         commands:
             - echo "Performing Git operations"
             - git clone https://github.com/MyDry30/admin-portal.git
-            - cd rest-api
+            - cd admin-portal
             - git checkout staging
             - git pull origin staging
             - git remote add codecommit https://git-codecommit.us-west-1.amazonaws.com/v1/repos/mydry30-frontend
