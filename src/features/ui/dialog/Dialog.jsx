@@ -1,7 +1,11 @@
-import { StyledDialog } from "./Dialog.styled";
+import { StyledDialog, StyledDialogWrapper } from "./Dialog.styled";
 
 const Dialog = ({ children }) => {
-	return <StyledDialog>{children}</StyledDialog>;
+	return (
+		<StyledDialogWrapper>
+			<StyledDialog>{children}</StyledDialog>
+		</StyledDialogWrapper>
+	);
 };
 
 export default Dialog;
