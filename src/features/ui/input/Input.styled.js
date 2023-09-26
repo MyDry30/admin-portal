@@ -7,7 +7,7 @@ export const StyledInput = styled.div`
 		background: none;
 		border: 1px solid #72777f;
 		border-radius: 4px;
-		width: 300px;
+		width: 100%;
 		color: black;
 		font-size: 1rem;
 		padding: 1rem 1rem 1rem 2.5rem;
@@ -15,7 +15,7 @@ export const StyledInput = styled.div`
 
 		&:active,
 		&:focus {
-			border: 1px solid var(--secondary-blue);
+			border: 1px solid var(--logo-green);
 		}
 
 		&::placeholder {
