@@ -11,13 +11,16 @@ export const StyledButton = styled.button`
 	border-radius: 50px;
 	border: none;
 	font-size: 14px;
+	transition: all 0.25s ease-in-out;
 
 	&:hover {
 		cursor: pointer;
+		box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
 	}
 
 	&:active,
 	&:focus {
-		outline: 1px solid var(--logo-green);
+		box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+		outline: 1px solid var(--primary-green);
 	}
 `;

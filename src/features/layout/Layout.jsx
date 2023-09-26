@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
 	MdAnnouncement,
 	MdArrowDropDown,
@@ -8,17 +8,40 @@ import {
 	MdSupervisedUserCircle,
 } from "react-icons/md";
 import { StyledBody, StyledHeader, StyledNav } from "./Layout.styled";
+import { useState } from "react";
+import useLogout from "../auth/useLogout";
 
 const Layout = () => {
+	const [modalOpen, setModalOpen] = useState(false);
+	const logout = useLogout();
+	const navigate = useNavigate();
+
+	const handleSignOut = async () => {
+		try {
+			await logout();
+			navigate("/");
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
 	return (
 		<>
 			<StyledHeader>
 				<Link className="headerLogo" to="/">
 					MyDry30
 				</Link>
-				<div className="headerLogin">
+				<div
+					className="headerLogin"
+					onClick={() => setModalOpen(!modalOpen)}
+				>
 					<p>Arthur Dent</p>
 					<MdArrowDropDown />
+					{modalOpen && (
+						<div className="dropdownContent">
+							<Link onClick={handleSignOut}>Sign Out</Link>
+						</div>
+					)}
 				</div>
 			</StyledHeader>
 			<StyledBody>

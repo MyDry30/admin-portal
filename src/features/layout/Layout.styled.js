@@ -27,6 +27,7 @@ export const StyledHeader = styled.header`
 		border-radius: 5px;
 		color: white;
 		cursor: pointer;
+		position: relative;
 
 		p {
 			font-size: 1.25rem;
@@ -35,6 +36,31 @@ export const StyledHeader = styled.header`
 		svg {
 			width: 18px;
 			height: 18px;
+		}
+
+		.dropdownContent {
+			position: absolute;
+			left: 0;
+			top: 40px;
+			width: 100%;
+			height: auto;
+			background: white;
+			display: flex;
+			flex-direction: column;
+			border-right: 1px solid var(--primary-green);
+			border-bottom: 1px solid var(--primary-green);
+			border-left: 1px solid var(--primary-green);
+			border-radius: 5px;
+
+			a {
+				z-index: 1000;
+				display: block;
+				width: 100%;
+				text-decoration: none;
+				color: var(--primary-green);
+				padding: 0.5rem;
+				text-align: center;
+			}
 		}
 	}
 `;

@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Layout from "./features/layout";
 import AdminUsers from "./pages/AdminUsers";
 import ContentManagement from "./pages/ContentManagement";
@@ -9,31 +9,44 @@ import SetPassword from "./pages/SetPassword";
 import Settings from "./pages/Settings";
 import SignIn from "./pages/SignIn";
 import Stats from "./pages/Stats";
+import Unauthorized from "./pages/Unauthorized";
 import UserManagement from "./pages/UserManagement";
+import PersistLogin from "./features/auth/PersistLogin";
+import SignInPassword from "./pages/SignInPassword";
+import RequireAuth from "./features/auth/RequireAuth";
 
 const App = () => {
 	return (
 		<Routes>
 			{/* public routes */}
 			<Route index element={<Home />} />
+			<Route path="unauthorized" element={<Unauthorized />} />
 			<Route path="sign-in" element={<SignIn />} />
+			<Route path="sign-in-password" element={<SignInPassword />} />
 			<Route path="password-reset" element={<PasswordReset />} />
 			<Route path="set-password" element={<SetPassword />} />
 
 			{/* protected routes */}
-			<Route path="/" element={<Layout />}>
-				<Route path="stats" element={<Stats />} />
-				<Route path="user-management" element={<UserManagement />} />
-				<Route
-					path="content-management"
-					element={<ContentManagement />}
-				/>
-				<Route path="admin-users" element={<AdminUsers />} />
-				<Route path="settings" element={<Settings />} />
-
-				{/* catch-all */}
-				<Route path="*" element={<Error />} />
+			<Route element={<PersistLogin />}>
+				<Route element={<RequireAuth allowedRoles={["admin"]} />}>
+					<Route path="/" element={<Layout />}>
+						<Route path="stats" element={<Stats />} />
+						<Route
+							path="user-management"
+							element={<UserManagement />}
+						/>
+						<Route
+							path="content-management"
+							element={<ContentManagement />}
+						/>
+						<Route path="admin-users" element={<AdminUsers />} />
+						<Route path="settings" element={<Settings />} />
+					</Route>
+				</Route>
 			</Route>
+
+			{/* catch-all */}
+			<Route path="*" element={<Error />} />
 		</Routes>
 	);
 };

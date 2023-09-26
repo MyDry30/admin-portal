@@ -3,10 +3,7 @@ import axios from "axios";
 import { URL } from "../../constants";
 
 const initialState = {
-	accessToken: null,
-	email: null,
-	role: null,
-	status: null,
+	user: {},
 	error: null,
 };
 
@@ -36,20 +33,17 @@ const authSlice = createSlice({
 	name: "auth",
 	initialState,
 	reducers: {
-		logOut: (state, _action) => {
-			state.accessToken = null;
-			state.email = null;
-			state.role = null;
-			state.status = null;
+		setUser(state, action) {
+			state.user = action.payload;
+		},
+		logOut(state, _action) {
+			state.user = {};
 		},
 	},
 	extraReducers(builder) {
 		builder
 			.addCase(handleLogin.fulfilled, (state, action) => {
-				state.accessToken = action.payload?.accessToken;
-				state.email = action.payload?.email;
-				state.role = action.payload?.role;
-				state.status = action.payload?.status;
+				state.user = action.payload;
 			})
 			.addCase(handleLogin.rejected, (state, action) => {
 				state.error = action.payload;
@@ -57,11 +51,8 @@ const authSlice = createSlice({
 	},
 });
 
-export const { logOut } = authSlice.actions;
+export const { setUser, logOut } = authSlice.actions;
 
-export const getAccessToken = (state) => state.auth.accessToken;
-export const getEmail = (state) => state.auth.email;
-export const getRole = (state) => state.auth.role;
-export const getState = (state) => state.auth.status;
+export const getUser = (state) => state.auth.user;
 
 export default authSlice.reducer;

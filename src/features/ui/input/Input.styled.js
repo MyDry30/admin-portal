@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const StyledInput = styled.div`
 	position: relative;
 
-	input[type="text"] {
+	input {
 		background: none;
 		border: 1px solid #72777f;
 		border-radius: 4px;
@@ -15,7 +15,7 @@ export const StyledInput = styled.div`
 
 		&:active,
 		&:focus {
-			border: 1px solid var(--logo-green);
+			border: 1px solid var(--primary-green);
 		}
 
 		&::placeholder {

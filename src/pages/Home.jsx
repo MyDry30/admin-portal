@@ -1,17 +1,18 @@
 import { useSelector } from "react-redux";
-import { getAccessToken } from "../features/app/authSlice";
+import { getUser } from "../features/app/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const Home = () => {
-	const accessToken = useSelector(getAccessToken);
+	const user = useSelector(getUser);
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!accessToken) {
+		if (!user?.accessToken) {
 			navigate("/sign-in");
 		}
-	}, [accessToken]);
+		navigate("/stats");
+	}, [user]);
 
 	return <div>Home</div>;
 };
