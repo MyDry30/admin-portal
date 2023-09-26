@@ -3,11 +3,15 @@ import Button from "../features/ui/button/Button";
 import Dialog from "../features/ui/dialog/Dialog";
 import Input from "../features/ui/input/Input";
 import { Link } from "react-router-dom";
+import Logo from "../assets/logo.svg";
 
 const SignIn = () => {
 	return (
 		<>
 			<Dialog>
+				<div className="justify-center">
+					<img width="64px" height="64px" src={Logo} />
+				</div>
 				<h3 className="center-text">Sign In</h3>
 				<p className="center-text supporting-text">
 					Sign in to your MyDry30 Account
