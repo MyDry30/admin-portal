@@ -67,7 +67,9 @@ const Layout = () => {
 						<p>Settings</p>
 					</NavLink>
 				</StyledNav>
-				<Outlet />
+				<section className="mainContent">
+					<Outlet />
+				</section>
 			</StyledBody>
 		</>
 	);

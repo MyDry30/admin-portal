@@ -46,7 +46,7 @@ const SignIn = () => {
 						required={true}
 					/>
 					<div className="justify-right">
-						<Button text="Continue" />
+						<Button>Continue</Button>
 					</div>
 				</form>
 				<div className="justify-center column-gap-2 mt-2">

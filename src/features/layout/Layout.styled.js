@@ -70,6 +70,10 @@ export const StyledBody = styled.main`
 	display: flex;
 	flex-direction: row;
 	align-items: top;
+
+	section.mainContent {
+		width: 100%;
+	}
 `;
 
 export const StyledNav = styled.nav`
