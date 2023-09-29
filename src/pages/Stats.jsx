@@ -3,9 +3,17 @@ import Button from "../features/ui/button/Button";
 import Container from "../features/ui/container/Container";
 import ControlBar from "../features/ui/controlBar/ControlBar";
 import StatsModal from "../features/ui/statsModal/StatsModal";
-import { TextField } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const Stats = () => {
+	const [date, setDate] = useState({ from: null, to: null });
+
+	useEffect(() => {
+		const fromDate = date.from?.$d;
+		const toDate = date.to?.$d;
+		console.log({ fromDate, toDate });
+	}, [date]);
+
 	return (
 		<>
 			<ControlBar>
@@ -17,8 +25,16 @@ const Stats = () => {
 			</ControlBar>
 			<Container>
 				<div className="flex-row justify-end column-gap-1 mb-1 color-green">
-					<DatePicker label="From" />
-					<DatePicker label="To" />
+					<DatePicker
+						label="From"
+						value={date.from}
+						onChange={(value) => setDate({ ...date, from: value })}
+					/>
+					<DatePicker
+						label="To"
+						value={date.to}
+						onChange={(value) => setDate({ ...date, to: value })}
+					/>
 				</div>
 				<div className="flex-row column-gap-3">
 					<StatsModal
