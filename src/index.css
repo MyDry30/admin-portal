@@ -75,6 +75,10 @@ h3 {
 	align-items: center;
 }
 
+.justify-end {
+	justify-content: flex-end;
+}
+
 .column-gap-1 {
 	column-gap: 1rem;
 }
@@ -164,5 +168,5 @@ h3 {
 }
 
 .color-green {
-	color: var(--primary-green);
+	color: var(--primary-green) !important;
 }

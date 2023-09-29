@@ -1,7 +1,9 @@
+import { DatePicker } from "@mui/x-date-pickers";
 import Button from "../features/ui/button/Button";
 import Container from "../features/ui/container/Container";
 import ControlBar from "../features/ui/controlBar/ControlBar";
 import StatsModal from "../features/ui/statsModal/StatsModal";
+import { TextField } from "@mui/material";
 
 const Stats = () => {
 	return (
@@ -14,6 +16,10 @@ const Stats = () => {
 				<Button>Export</Button>
 			</ControlBar>
 			<Container>
+				<div className="flex-row justify-end column-gap-1 mb-1 color-green">
+					<DatePicker label="From" />
+					<DatePicker label="To" />
+				</div>
 				<div className="flex-row column-gap-3">
 					<StatsModal
 						title="User Statistics"
