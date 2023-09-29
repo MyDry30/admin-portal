@@ -95,6 +95,7 @@ export const StyledNav = styled.nav`
 		border-radius: 50px;
 		padding: 1rem;
 		transition: all 0.25s ease-in-out;
+		white-space: nowrap;
 
 		&.active {
 			background-color: var(--primary-green-30);
