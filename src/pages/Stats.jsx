@@ -9,9 +9,8 @@ const Stats = () => {
 	const [date, setDate] = useState({ from: null, to: null });
 
 	useEffect(() => {
-		const fromDate = date.from?.$d;
-		const toDate = date.to?.$d;
-		console.log({ fromDate, toDate });
+		// const fromDate = date.from?.$d;
+		// const toDate = date.to?.$d;
 	}, [date]);
 
 	return (

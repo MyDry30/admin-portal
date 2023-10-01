@@ -6,6 +6,7 @@
 	--primary-blue: #2196f3;
 	--secondary-blue: #2979ff;
 	--text-gray: #42474e;
+	--text-inactive: #cbcbcd;
 }
 
 * {
@@ -53,6 +54,10 @@ h3 {
 	flex-direction: column;
 }
 
+.align-center {
+	align-items: center;
+}
+
 .center-text {
 	text-align: center;
 }
@@ -79,6 +84,10 @@ h3 {
 	justify-content: flex-end;
 }
 
+.column-gap-05 {
+	column-gap: 0.5rem;
+}
+
 .column-gap-1 {
 	column-gap: 1rem;
 }
@@ -97,6 +106,10 @@ h3 {
 
 .column-gap-5 {
 	column-gap: 5rem;
+}
+
+.row-gap-05 {
+	row-gap: 0.5rem;
 }
 
 .row-gap-1 {
@@ -149,6 +162,14 @@ h3 {
 	line-height: 20px;
 	letter-spacing: 0.1px;
 	color: rgba(0, 0, 0, 0.45);
+}
+
+.small-text {
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 16px;
+	letter-spacing: 0.4px;
+	color: #44464e;
 }
 
 .label-text {

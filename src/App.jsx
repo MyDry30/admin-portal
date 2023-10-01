@@ -20,6 +20,9 @@ import {
 	outlinedInputClasses,
 	useTheme,
 } from "@mui/material";
+import UserManagementActive from "./pages/UserManagementActive";
+import UserManagementInactive from "./pages/UserManagementInactive";
+import AppUser from "./pages/AppUser";
 
 const customTheme = (outerTheme) =>
 	createTheme({
@@ -72,7 +75,17 @@ const App = () => {
 							<Route
 								path="user-management"
 								element={<UserManagement />}
-							/>
+							>
+								<Route
+									path="active"
+									element={<UserManagementActive />}
+								/>
+								<Route
+									path="inactive"
+									element={<UserManagementInactive />}
+								/>
+							</Route>
+							<Route path="users/:userId" element={<AppUser />} />
 							<Route
 								path="content-management"
 								element={<ContentManagement />}

@@ -52,7 +52,7 @@ const Layout = () => {
 					</NavLink>
 					<NavLink to="/user-management">
 						<MdPeopleAlt />
-						<p>App Users</p>
+						<p>User Management</p>
 					</NavLink>
 					<NavLink to="/content-management">
 						<MdAnnouncement />
