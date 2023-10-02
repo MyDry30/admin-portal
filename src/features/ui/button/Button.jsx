@@ -1,11 +1,15 @@
 import { StyledButton } from "./Button.styled";
 
-const Button = ({ children, onClick }) => {
+const Button = ({ children, onClick, type = "outline" }) => {
 	const handleClick = () => {
 		onClick && onClick();
 	};
 
-	return <StyledButton onClick={handleClick}>{children}</StyledButton>;
+	return (
+		<StyledButton type={type} onClick={handleClick}>
+			{children}
+		</StyledButton>
+	);
 };
 
 export default Button;

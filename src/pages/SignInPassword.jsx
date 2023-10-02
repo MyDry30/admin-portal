@@ -63,7 +63,7 @@ const SignInPassword = () => {
 						>
 							Forgot Password
 						</Link>
-						<Button>Sign In</Button>
+						<Button type="filled">Sign In</Button>
 					</div>
 				</form>
 				<div className="justify-center column-gap-2 mt-2">

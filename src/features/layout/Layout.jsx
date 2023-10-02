@@ -1,7 +1,6 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
 	MdAnnouncement,
-	MdArrowDropDown,
 	MdBarChart,
 	MdPeopleAlt,
 	MdSettings,
@@ -10,11 +9,15 @@ import {
 import { StyledBody, StyledHeader, StyledNav } from "./Layout.styled";
 import { useState } from "react";
 import useLogout from "../auth/useLogout";
+import AccountIcon from "../ui/accountIcon/AccountIcon";
+import { useSelector } from "react-redux";
+import { getUser } from "../app/authSlice";
 
 const Layout = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const logout = useLogout();
 	const navigate = useNavigate();
+	const user = useSelector(getUser);
 
 	const handleSignOut = async () => {
 		try {
@@ -31,18 +34,10 @@ const Layout = () => {
 				<Link className="headerLogo" to="/">
 					MyDry30
 				</Link>
-				<div
-					className="headerLogin"
-					onClick={() => setModalOpen(!modalOpen)}
-				>
-					<p>Arthur Dent</p>
-					<MdArrowDropDown />
-					{modalOpen && (
-						<div className="dropdownContent">
-							<Link onClick={handleSignOut}>Sign Out</Link>
-						</div>
-					)}
-				</div>
+				<AccountIcon
+					onClick={handleSignOut}
+					firstName={user?.firstName}
+				/>
 			</StyledHeader>
 			<StyledBody>
 				<StyledNav>
