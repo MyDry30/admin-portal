@@ -6,6 +6,7 @@ export const StyledSubNav = styled.div`
 	width: min-content;
 
 	a {
+		white-space: nowrap;
 		padding: 0.5rem 3rem;
 		display: block;
 		text-decoration: none;

@@ -30,16 +30,16 @@ const UserManagement = () => {
 			</ControlBar>
 			<Container>
 				<div className="flex-row justify-sb">
-					<SearchInput>
-						<form onSubmit={handleSearchSubmit}>
+					<form onSubmit={handleSearchSubmit}>
+						<SearchInput>
 							<input
 								ref={searchResult}
 								type="text"
 								placeholder="Search"
 							/>
-						</form>
-						<MdSearch />
-					</SearchInput>
+							<MdSearch />
+						</SearchInput>
+					</form>
 					<Button>Filter</Button>
 				</div>
 				<SubNav>

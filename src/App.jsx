@@ -23,6 +23,9 @@ import {
 import UserManagementActive from "./pages/UserManagementActive";
 import UserManagementInactive from "./pages/UserManagementInactive";
 import AppUser from "./pages/AppUser";
+import ContentManagementChallenge from "./pages/ContentManagementChallenge";
+import ContentManagementCoaches from "./pages/ContentManagementCoaches";
+import ContentMangementToolkit from "./pages/ContentMangementToolkit";
 
 const customTheme = (outerTheme) =>
 	createTheme({
@@ -89,7 +92,20 @@ const App = () => {
 							<Route
 								path="content-management"
 								element={<ContentManagement />}
-							/>
+							>
+								<Route
+									path="30-day-challenge"
+									element={<ContentManagementChallenge />}
+								/>
+								<Route
+									path="coaches"
+									element={<ContentManagementCoaches />}
+								/>
+								<Route
+									path="toolkit"
+									element={<ContentMangementToolkit />}
+								/>
+							</Route>
 							<Route
 								path="admin-users"
 								element={<AdminUsers />}
