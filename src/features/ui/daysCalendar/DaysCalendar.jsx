@@ -7,9 +7,7 @@ const DaysCalendar = () => {
 
 	const initializeDays = () => {
 		const temp = [];
-		for (let i = 1; i < 31; i++) {
-			temp.push(i);
-		}
+		for (let i = 1; i < 31; i++) temp.push(i);
 		return temp;
 	};
 

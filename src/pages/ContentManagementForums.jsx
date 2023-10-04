@@ -1,8 +1,8 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { useRef } from "react";
 import SearchInput from "../features/ui/searchInput/SearchInput";
 import { MdSearch } from "react-icons/md";
-import { useRef } from "react";
 import Button from "../features/ui/button/Button";
+import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
 	{ field: "id", headerName: "ID", width: 70 },
@@ -278,7 +278,7 @@ const initialState = {
 	},
 };
 
-const ContentManagementCoaches = () => {
+const ContentManagementForums = () => {
 	const searchResult = useRef("");
 
 	const handleSearchSubmit = async (e) => {
@@ -293,8 +293,8 @@ const ContentManagementCoaches = () => {
 				<form onSubmit={handleSearchSubmit}>
 					<SearchInput>
 						<input
-							ref={searchResult}
 							type="text"
+							ref={searchResult}
 							placeholder="Search"
 						/>
 						<MdSearch />
@@ -315,4 +315,4 @@ const ContentManagementCoaches = () => {
 	);
 };
 
-export default ContentManagementCoaches;
+export default ContentManagementForums;

@@ -1,8 +1,4 @@
 import { DataGrid } from "@mui/x-data-grid";
-import SearchInput from "../features/ui/searchInput/SearchInput";
-import { MdSearch } from "react-icons/md";
-import { useRef } from "react";
-import Button from "../features/ui/button/Button";
 
 const columns = [
 	{ field: "id", headerName: "ID", width: 70 },
@@ -278,41 +274,15 @@ const initialState = {
 	},
 };
 
-const ContentManagementCoaches = () => {
-	const searchResult = useRef("");
-
-	const handleSearchSubmit = async (e) => {
-		e.preventDefault();
-		const search = searchResult.current.value;
-		console.log(search);
-	};
-
+const AdminUsersDisabled = () => {
 	return (
-		<>
-			<div className="flex-row justify-sb">
-				<form onSubmit={handleSearchSubmit}>
-					<SearchInput>
-						<input
-							ref={searchResult}
-							type="text"
-							placeholder="Search"
-						/>
-						<MdSearch />
-					</SearchInput>
-				</form>
-				<div className="flex-row column-gap-05">
-					<Button>Filter</Button>
-					<Button type="filled">Add</Button>
-				</div>
-			</div>
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				initialState={initialState}
-				pageSizeOptions={[10, 25, 50]}
-			/>
-		</>
+		<DataGrid
+			rows={rows}
+			columns={columns}
+			initialState={initialState}
+			pageSizeOptions={[10, 25, 50]}
+		/>
 	);
 };
 
-export default ContentManagementCoaches;
+export default AdminUsersDisabled;

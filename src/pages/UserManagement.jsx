@@ -19,7 +19,7 @@ const UserManagement = () => {
 	};
 
 	useEffect(() => {
-		navigate("/user-management/active");
+		// navigate("/user-management/active");
 	}, []);
 
 	return (

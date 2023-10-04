@@ -26,6 +26,12 @@ import AppUser from "./pages/AppUser";
 import ContentManagementChallenge from "./pages/ContentManagementChallenge";
 import ContentManagementCoaches from "./pages/ContentManagementCoaches";
 import ContentMangementToolkit from "./pages/ContentMangementToolkit";
+import ContentManagementForums from "./pages/ContentManagementForums";
+import ContentManagementMedia from "./pages/ContentManagementMedia";
+import AdminUsersActive from "./pages/AdminUsersActive";
+import AdminUsersDisabled from "./pages/AdminUsersDisabled";
+import AdminUser from "./pages/AdminUser";
+import NewAdminUser from "./pages/NewAdminUser";
 
 const customTheme = (outerTheme) =>
 	createTheme({
@@ -104,12 +110,31 @@ const App = () => {
 								<Route
 									path="toolkit"
 									element={<ContentMangementToolkit />}
+								>
+									<Route
+										path="forums"
+										element={<ContentManagementForums />}
+									/>
+									<Route
+										path="media"
+										element={<ContentManagementMedia />}
+									/>
+								</Route>
+							</Route>
+							<Route path="admin-users" element={<AdminUsers />}>
+								<Route
+									path="active"
+									element={<AdminUsersActive />}
+								/>
+								<Route
+									path="disabled"
+									element={<AdminUsersDisabled />}
 								/>
 							</Route>
-							<Route
-								path="admin-users"
-								element={<AdminUsers />}
-							/>
+							<Route path="/users/admin">
+								<Route path="add" element={<NewAdminUser />} />
+								<Route path=":userId" element={<AdminUser />} />
+							</Route>
 							<Route path="settings" element={<Settings />} />
 						</Route>
 					</Route>
