@@ -4,9 +4,10 @@ import Dialog from "../features/ui/dialog/Dialog";
 import Input from "../features/ui/input/Input";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.svg";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SignIn = () => {
+	const [loading, setLoading] = useState(false);
 	const emailRef = useRef("");
 	const navigate = useNavigate();
 
@@ -15,8 +16,10 @@ const SignIn = () => {
 	}, []);
 
 	const handleSignIn = (e) => {
+		setLoading(true);
 		e.preventDefault();
 		const email = emailRef.current.value;
+		setLoading(false);
 		navigate(`/sign-in-password?email=${email}`);
 	};
 
@@ -46,7 +49,9 @@ const SignIn = () => {
 						required={true}
 					/>
 					<div className="justify-right">
-						<Button type="filled">Continue</Button>
+						<Button type="filled" loading={loading}>
+							Continue
+						</Button>
 					</div>
 				</form>
 				<div className="justify-center column-gap-2 mt-2">

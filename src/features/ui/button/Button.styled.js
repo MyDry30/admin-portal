@@ -1,4 +1,13 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
 
 export const StyledButton = styled.button`
 	background: ${(props) =>
@@ -16,6 +25,20 @@ export const StyledButton = styled.button`
 	border-radius: 100px;
 	font-size: 14px;
 	transition: all 0.25s ease-in-out;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+
+	&:disabled,
+	&[disabled] {
+		width: 100px !important;
+		background: var(--text-inactive) !important;
+		color: var(--text-gray) !important;
+		border: none !important;
+		cursor: not-allowed !important;
+		box-shadow: none !important;
+	}
 
 	&:hover {
 		cursor: pointer;
@@ -32,5 +55,12 @@ export const StyledButton = styled.button`
 	&:active,
 	&:focus {
 		box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+	}
+
+	svg {
+		width: 1rem;
+		height: 1rem;
+		color: black;
+		animation: ${rotate} 2s linear infinite;
 	}
 `;

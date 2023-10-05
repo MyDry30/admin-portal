@@ -7,14 +7,12 @@ import {
 	MdSupervisedUserCircle,
 } from "react-icons/md";
 import { StyledBody, StyledHeader, StyledNav } from "./Layout.styled";
-import { useState } from "react";
 import useLogout from "../auth/useLogout";
 import AccountIcon from "../ui/accountIcon/AccountIcon";
 import { useSelector } from "react-redux";
 import { getUser } from "../app/authSlice";
 
 const Layout = () => {
-	const [modalOpen, setModalOpen] = useState(false);
 	const logout = useLogout();
 	const navigate = useNavigate();
 	const user = useSelector(getUser);

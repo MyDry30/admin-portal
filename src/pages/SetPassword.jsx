@@ -2,24 +2,29 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Dialog from "../features/ui/dialog/Dialog";
 import Logo from "../assets/logo.svg";
 import { MdKey } from "react-icons/md";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Input from "../features/ui/input/Input";
 import setPassword from "../features/api/setPassword";
+import Button from "../features/ui/button/Button";
 
 const SetPassword = () => {
+	const [loading, setLoading] = useState(false);
 	const [searchParams] = useSearchParams();
 	const token = searchParams.get("token");
 	const passwordRef = useRef("");
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
+		setLoading(true);
 		e.preventDefault();
 		try {
 			await setPassword(token, passwordRef.current.value);
 			alert("Password has been reset. Navigating to sign-in page...");
 			navigate("/sign-in");
 		} catch (err) {
-			console.log(err);
+			alert(`Error: ${err.message}`);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -45,17 +50,22 @@ const SetPassword = () => {
 				<Input
 					ref={passwordRef}
 					placeholder="Password"
-					type="text"
+					type="password"
 					required={true}
 					icon={<MdKey />}
 				/>
+				<div>
+					<p>At least 1 lowercase letter</p>
+					<p>At least 1 uppercase letter</p>
+					<p>At least 1 number</p>
+					<p>At least 12 characters</p>
+				</div>
+				<div className="flex-row justify-end">
+					<Button type="filled" loading={loading}>
+						Set Password
+					</Button>
+				</div>
 			</form>
-			<div>
-				<p>At least 1 lowercase letter</p>
-				<p>At least 1 uppercase letter</p>
-				<p>At least 1 number</p>
-				<p>At least 12 characters</p>
-			</div>
 		</Dialog>
 	);
 };

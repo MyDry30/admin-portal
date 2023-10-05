@@ -5,16 +5,15 @@ import Input from "../features/ui/input/Input";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import ModalDropdown from "../features/ui/modalDropdown/ModalDropdown";
-import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { handleLogin } from "../features/app/authSlice";
+import { useEffect, useRef, useState } from "react";
+import handleLogin from "../features/api/handleLogin";
 
 const SignInPassword = () => {
+	const [loading, setLoading] = useState(false);
 	const [searchParams] = useSearchParams();
 	const passwordRef = useRef("");
 	const email = searchParams.get("email");
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
 
 	useEffect(() => {
 		passwordRef.current.focus();
@@ -27,10 +26,23 @@ const SignInPassword = () => {
 	}, [email]);
 
 	const handleSignIn = async (e) => {
+		setLoading(true);
 		e.preventDefault();
 		const password = passwordRef.current.value;
-		await dispatch(handleLogin({ email, password }));
-		navigate("/");
+
+		try {
+			await handleLogin(email, password);
+			navigate("/");
+		} catch (err) {
+			const status = err.message;
+			if (status === "400") {
+				alert("Unable to login: invalid password.");
+			} else {
+				alert("Unable to login at this time.");
+			}
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -52,7 +64,7 @@ const SignInPassword = () => {
 					<Input
 						ref={passwordRef}
 						placeholder="Password"
-						type="text"
+						type="password"
 						required={true}
 						icon={<MdLock />}
 					/>
@@ -63,7 +75,9 @@ const SignInPassword = () => {
 						>
 							Forgot Password
 						</Link>
-						<Button type="filled">Sign In</Button>
+						<Button type="filled" loading={loading}>
+							Sign In
+						</Button>
 					</div>
 				</form>
 				<div className="justify-center column-gap-2 mt-2">

@@ -8,7 +8,17 @@ const setPassword = async (token, newPassword) => {
 		});
 		return response;
 	} catch (err) {
-		throw new Error(err);
+		if (err.response) {
+			const { status, data } = err.response;
+			if (data.error) {
+				throw new Error(data.error);
+			}
+			throw new Error(status);
+		} else if (err.request) {
+			throw new Error("No response recieved");
+		} else {
+			throw new Error(err.message);
+		}
 	}
 };
 

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import Dialog from "../features/ui/dialog/Dialog";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Input from "../features/ui/input/Input";
 import { MdEmail } from "react-icons/md";
 import Button from "../features/ui/button/Button";
@@ -8,10 +8,12 @@ import Logo from "../assets/logo.svg";
 import requestReset from "../features/api/requestReset";
 
 const PasswordReset = () => {
+	const [loading, setLoading] = useState(false);
 	const emailRef = useRef("");
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
+		setLoading(true);
 		e.preventDefault();
 		try {
 			const response = await requestReset(emailRef.current.value);
@@ -21,7 +23,9 @@ const PasswordReset = () => {
 			);
 			navigate(`/${resetLink}`);
 		} catch (err) {
-			console.log(err);
+			alert(`Error: ${err.message}`);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -62,7 +66,9 @@ const PasswordReset = () => {
 					>
 						Go Back
 					</p>
-					<Button type="filled">Continue</Button>
+					<Button type="filled" loading={loading}>
+						Continue
+					</Button>
 				</div>
 			</form>
 			<div className="justify-center column-gap-2 mt-2">

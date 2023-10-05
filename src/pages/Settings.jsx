@@ -1,5 +1,13 @@
+import Container from "../features/ui/container/Container";
+
 const Settings = () => {
-	return <div>Settings Page</div>;
+	return (
+		<>
+			<Container>
+				<p>settings page</p>
+			</Container>
+		</>
+	);
 };
 
 export default Settings;

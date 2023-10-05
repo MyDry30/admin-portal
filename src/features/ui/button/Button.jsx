@@ -1,13 +1,14 @@
 import { StyledButton } from "./Button.styled";
+import { MdAutorenew } from "react-icons/md";
 
-const Button = ({ children, onClick, type = "outline" }) => {
+const Button = ({ children, onClick, type = "outline", loading = false }) => {
 	const handleClick = () => {
-		onClick && onClick();
+		onClick && !loading && onClick();
 	};
 
 	return (
-		<StyledButton type={type} onClick={handleClick}>
-			{children}
+		<StyledButton type={type} onClick={handleClick} disabled={loading}>
+			{loading ? <MdAutorenew /> : children}
 		</StyledButton>
 	);
 };
