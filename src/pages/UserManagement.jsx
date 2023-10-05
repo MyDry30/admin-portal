@@ -1,15 +1,14 @@
-import { Outlet, useNavigate } from "react-router";
+import { Outlet } from "react-router";
 import ControlBar from "../features/ui/controlBar/ControlBar";
 import Button from "../features/ui/button/Button";
 import Container from "../features/ui/container/Container";
 import SubNav from "../features/ui/subNav/SubNav";
 import { NavLink } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import SearchInput from "../features/ui/searchInput/SearchInput";
 import { MdSearch } from "react-icons/md";
 
 const UserManagement = () => {
-	const navigate = useNavigate();
 	const searchResult = useRef("");
 
 	const handleSearchSubmit = async (e) => {
@@ -17,10 +16,6 @@ const UserManagement = () => {
 		const search = searchResult.current.value;
 		console.log(search);
 	};
-
-	useEffect(() => {
-		// navigate("/user-management/active");
-	}, []);
 
 	return (
 		<>
@@ -43,8 +38,8 @@ const UserManagement = () => {
 					<Button>Filter</Button>
 				</div>
 				<SubNav>
-					<NavLink to="/user-management/active">Active</NavLink>
-					<NavLink to="/user-management/inactive">Inactive</NavLink>
+					<NavLink to="active">Active</NavLink>
+					<NavLink to="inactive">Inactive</NavLink>
 				</SubNav>
 				<Outlet />
 			</Container>

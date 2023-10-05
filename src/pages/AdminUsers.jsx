@@ -1,6 +1,6 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import Container from "../features/ui/container/Container";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import SubNav from "../features/ui/subNav/SubNav";
 import SearchInput from "../features/ui/searchInput/SearchInput";
 import { MdSearch } from "react-icons/md";
@@ -9,17 +9,12 @@ import Button from "../features/ui/button/Button";
 
 const AdminUsers = () => {
 	const searchRef = useRef("");
-	const navigate = useNavigate();
 
 	const handleSearchSubmit = async (e) => {
 		e.preventDefault();
 		const search = searchRef.current.value;
 		console.log(search);
 	};
-
-	useEffect(() => {
-		// navigate("/admin-users/active");
-	}, []);
 
 	return (
 		<>
@@ -42,8 +37,8 @@ const AdminUsers = () => {
 					</SearchInput>
 				</form>
 				<SubNav>
-					<NavLink to="/admin-users/active">Active</NavLink>
-					<NavLink to="/admin-users/disabled">Disabled</NavLink>
+					<NavLink to="active">Active</NavLink>
+					<NavLink to="disabled">Disabled</NavLink>
 				</SubNav>
 				<Outlet />
 			</Container>

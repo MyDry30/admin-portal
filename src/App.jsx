@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./features/layout";
 import AdminUsers from "./pages/AdminUsers";
 import ContentManagement from "./pages/ContentManagement";
@@ -74,17 +74,24 @@ const App = () => {
 				<Route path="sign-in" element={<SignIn />} />
 				<Route path="sign-in-password" element={<SignInPassword />} />
 				<Route path="password-reset" element={<PasswordReset />} />
-				<Route path="set-password" element={<SetPassword />} />
+				<Route path="reset-password" element={<SetPassword />} />
 
 				{/* protected routes */}
 				<Route element={<PersistLogin />}>
 					<Route element={<RequireAuth allowedRoles={["admin"]} />}>
 						<Route path="/" element={<Layout />}>
+							{/* stats page */}
 							<Route path="stats" element={<Stats />} />
+
+							{/* user management page */}
 							<Route
 								path="user-management"
 								element={<UserManagement />}
 							>
+								<Route
+									index
+									element={<Navigate to="active" />}
+								/>
 								<Route
 									path="active"
 									element={<UserManagementActive />}
@@ -94,11 +101,16 @@ const App = () => {
 									element={<UserManagementInactive />}
 								/>
 							</Route>
-							<Route path="users/:userId" element={<AppUser />} />
+
+							{/* content management page */}
 							<Route
 								path="content-management"
 								element={<ContentManagement />}
 							>
+								<Route
+									index
+									element={<Navigate to="30-day-challenge" />}
+								/>
 								<Route
 									path="30-day-challenge"
 									element={<ContentManagementChallenge />}
@@ -112,6 +124,10 @@ const App = () => {
 									element={<ContentMangementToolkit />}
 								>
 									<Route
+										index
+										element={<Navigate to="forums" />}
+									/>
+									<Route
 										path="forums"
 										element={<ContentManagementForums />}
 									/>
@@ -121,7 +137,13 @@ const App = () => {
 									/>
 								</Route>
 							</Route>
+
+							{/* admin users page */}
 							<Route path="admin-users" element={<AdminUsers />}>
+								<Route
+									index
+									element={<Navigate to="active" />}
+								/>
 								<Route
 									path="active"
 									element={<AdminUsersActive />}
@@ -131,10 +153,15 @@ const App = () => {
 									element={<AdminUsersDisabled />}
 								/>
 							</Route>
+
+							{/* users pages */}
+							<Route path="users/:userId" element={<AppUser />} />
 							<Route path="/users/admin">
 								<Route path="add" element={<NewAdminUser />} />
 								<Route path=":userId" element={<AdminUser />} />
 							</Route>
+
+							{/* settings page */}
 							<Route path="settings" element={<Settings />} />
 						</Route>
 					</Route>

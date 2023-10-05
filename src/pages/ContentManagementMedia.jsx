@@ -1,7 +1,3 @@
-import { useRef } from "react";
-import SearchInput from "../features/ui/searchInput/SearchInput";
-import { MdSearch } from "react-icons/md";
-import Button from "../features/ui/button/Button";
 import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
@@ -279,39 +275,13 @@ const initialState = {
 };
 
 const ContentManagementMedia = () => {
-	const searchResult = useRef("");
-
-	const handleSearchSubmit = async (e) => {
-		e.preventDefault();
-		const search = searchResult.current.value;
-		console.log(search);
-	};
-
 	return (
-		<>
-			<div className="flex-row justify-sb">
-				<form onSubmit={handleSearchSubmit}>
-					<SearchInput>
-						<input
-							type="text"
-							ref={searchResult}
-							placeholder="Search"
-						/>
-						<MdSearch />
-					</SearchInput>
-				</form>
-				<div className="flex-row column-gap-05">
-					<Button>Filter</Button>
-					<Button type="filled">Add</Button>
-				</div>
-			</div>
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				initialState={initialState}
-				pageSizeOptions={[10, 25, 50]}
-			/>
-		</>
+		<DataGrid
+			rows={rows}
+			columns={columns}
+			initialState={initialState}
+			pageSizeOptions={[10, 25, 50]}
+		/>
 	);
 };
 

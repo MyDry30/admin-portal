@@ -2,7 +2,7 @@ import { MdLock } from "react-icons/md";
 import Button from "../features/ui/button/Button";
 import Dialog from "../features/ui/dialog/Dialog";
 import Input from "../features/ui/input/Input";
-import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import ModalDropdown from "../features/ui/modalDropdown/ModalDropdown";
 import { useEffect, useRef } from "react";
@@ -52,13 +52,13 @@ const SignInPassword = () => {
 					<Input
 						ref={passwordRef}
 						placeholder="Password"
-						type="password"
+						type="text"
 						required={true}
 						icon={<MdLock />}
 					/>
 					<div className="justify-sb">
 						<Link
-							to="/password-reset"
+							to={`/password-reset`}
 							className="label-text color-green"
 						>
 							Forgot Password
