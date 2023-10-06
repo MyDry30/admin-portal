@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Container from "../features/ui/container/Container";
 import { useRef } from "react";
 import SubNav from "../features/ui/subNav/SubNav";
@@ -8,6 +8,7 @@ import ControlBar from "../features/ui/controlBar/ControlBar";
 import Button from "../features/ui/button/Button";
 
 const AdminUsers = () => {
+	const navigate = useNavigate();
 	const searchRef = useRef("");
 
 	const handleSearchSubmit = async (e) => {
@@ -22,7 +23,12 @@ const AdminUsers = () => {
 				<h2>Admin Users</h2>
 				<div className="flex-row column-gap-05">
 					<Button>Export</Button>
-					<Button type="filled">Add User</Button>
+					<Button
+						type="filled"
+						onClick={() => navigate("/users/admin/add")}
+					>
+						Add User
+					</Button>
 				</div>
 			</ControlBar>
 			<Container>
