@@ -1,4 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
 	{ field: "id", headerName: "ID", width: 70 },
@@ -10,15 +11,6 @@ const columns = [
 		type: "number",
 		width: 90,
 	},
-	// {
-	// 	field: "fullName",
-	// 	headerName: "Full name",
-	// 	description: "This column has a value getter and is not sortable.",
-	// 	sortable: false,
-	// 	width: 160,
-	// 	valueGetter: (params) =>
-	// 		`${params.row.firstName || ""} ${params.row.lastName || ""}`,
-	// },
 ];
 const rows = [
 	{ id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
@@ -284,12 +276,21 @@ const initialState = {
 };
 
 const UserManagementInactive = () => {
+	const navigate = useNavigate();
+
+	const handleRowClick = (params) => {
+		const { row } = params;
+		navigate("/users/123");
+	};
+
 	return (
 		<DataGrid
 			rows={rows}
 			columns={columns}
 			initialState={initialState}
+			onRowClick={handleRowClick}
 			pageSizeOptions={[10, 25, 50]}
+			className="custom-data-grid"
 		/>
 	);
 };

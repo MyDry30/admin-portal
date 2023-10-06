@@ -35,7 +35,6 @@ const UserManagement = () => {
 							<MdSearch />
 						</SearchInput>
 					</form>
-					<Button>Filter</Button>
 				</div>
 				<SubNav>
 					<NavLink to="active">Active</NavLink>

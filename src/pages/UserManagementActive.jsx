@@ -1,4 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
 	{ field: "id", headerName: "ID", width: 70 },
@@ -275,12 +276,21 @@ const initialState = {
 };
 
 const UserManagementActive = () => {
+	const navigate = useNavigate();
+
+	const handleRowClick = (params) => {
+		const { row } = params;
+		navigate("/users/123");
+	};
+
 	return (
 		<DataGrid
 			rows={rows}
 			columns={columns}
 			initialState={initialState}
+			onRowClick={handleRowClick}
 			pageSizeOptions={[10, 25, 50]}
+			className="custom-data-grid"
 		/>
 	);
 };
