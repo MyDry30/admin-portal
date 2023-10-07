@@ -20,6 +20,21 @@ const AppUser = () => {
 	const [status, setStatus] = useState("active");
 
 	const handleSaveButton = async () => {
+		if (!firstName) {
+			return alert("First Name is required.");
+		}
+		if (!lastName) {
+			return alert("Last Name is required.");
+		}
+		if (!email) {
+			return alert("Email is required.");
+		}
+		if (!journey) {
+			return alert("Journey is required.");
+		}
+		if (!status) {
+			return alert("Status is required.");
+		}
 		console.log("save form here");
 	};
 
