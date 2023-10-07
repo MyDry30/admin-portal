@@ -1,11 +1,13 @@
-import Container from "../features/ui/container/Container";
+import ControlBar from "../features/ui/controlBar/ControlBar";
 
 const Settings = () => {
 	return (
 		<>
-			<Container>
-				<p>settings page</p>
-			</Container>
+			<ControlBar>
+				<div className="flex-row justify-sb column-gap-1">
+					<h2>Settings</h2>
+				</div>
+			</ControlBar>
 		</>
 	);
 };

@@ -8,14 +8,6 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useRef } from "react";
 
 const ContentManagement = () => {
-	const searchRef = useRef("");
-
-	const handleSearchSubmit = async (e) => {
-		e.preventDefault();
-		const search = searchRef.current.value;
-		console.log(search);
-	};
-
 	return (
 		<>
 			<ControlBar>
@@ -23,26 +15,6 @@ const ContentManagement = () => {
 				<Button>Export</Button>
 			</ControlBar>
 			<Container>
-				<div className="flex-row justify-sb">
-					<form onSubmit={handleSearchSubmit}>
-						<SearchInput>
-							<input
-								ref={searchRef}
-								type="text"
-								placeholder="Search"
-							/>
-							<MdSearch />
-						</SearchInput>
-					</form>
-					<div className="flex-row column-gap-05">
-						<Button type="filled">Add</Button>
-					</div>
-				</div>
-				<SubNav>
-					<NavLink to="30-day-challenge">30 Day Challenge</NavLink>
-					<NavLink to="coaches">Coaches</NavLink>
-					<NavLink to="toolkit">Toolkit</NavLink>
-				</SubNav>
 				<Outlet />
 			</Container>
 		</>

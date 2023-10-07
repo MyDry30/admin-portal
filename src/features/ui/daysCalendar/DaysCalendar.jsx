@@ -1,8 +1,10 @@
 import { MdArrowRight } from "react-icons/md";
 import { StyledDaysChallenge } from "./DaysCalendar.styled";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const DaysCalendar = () => {
+	const navigate = useNavigate();
 	const [days, setDays] = useState([]);
 
 	const initializeDays = () => {
@@ -19,7 +21,7 @@ const DaysCalendar = () => {
 	return (
 		<StyledDaysChallenge>
 			{days?.map((day, index) => (
-				<div key={index}>
+				<div key={index} onClick={() => navigate("/days/12345")}>
 					<p>{`Day ${day}`}</p>
 					<MdArrowRight />
 				</div>

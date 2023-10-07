@@ -32,6 +32,14 @@ import AdminUsersActive from "./pages/AdminUsersActive";
 import AdminUsersDisabled from "./pages/AdminUsersDisabled";
 import AdminUser from "./pages/AdminUser";
 import NewAdminUser from "./pages/NewAdminUser";
+import ContentManagementDay from "./pages/ContentManagementDay";
+import ContentManagementDayAddTask from "./pages/ContentManagementDayAddTask";
+import ContentManagementAddCoach from "./pages/ContentManagementAddCoach";
+import ContentManagementCoach from "./pages/ContentManagementCoach";
+import ContentManagementAddForum from "./pages/ContentManagementAddForum";
+import ContentManagementForum from "./pages/ContentManagementForum";
+import ContentManagementAddMedia from "./pages/ContentManagementAddMedia";
+import ContentManagementMediaSingle from "./pages/ContentManagementMediaSingle";
 
 const customTheme = (outerTheme) =>
 	createTheme({
@@ -136,6 +144,46 @@ const App = () => {
 										element={<ContentManagementMedia />}
 									/>
 								</Route>
+							</Route>
+							<Route path="days">
+								<Route
+									path="add"
+									element={<ContentManagementDayAddTask />}
+								/>
+								<Route
+									path=":dayId"
+									element={<ContentManagementDay />}
+								/>
+							</Route>
+							<Route path="coaches">
+								<Route
+									path="add"
+									element={<ContentManagementAddCoach />}
+								/>
+								<Route
+									path=":coachId"
+									element={<ContentManagementCoach />}
+								/>
+							</Route>
+							<Route path="forums">
+								<Route
+									path="add"
+									element={<ContentManagementAddForum />}
+								/>
+								<Route
+									path=":forumId"
+									element={<ContentManagementForum />}
+								/>
+							</Route>
+							<Route path="media">
+								<Route
+									path="add"
+									element={<ContentManagementAddMedia />}
+								/>
+								<Route
+									path=":mediaId"
+									element={<ContentManagementMediaSingle />}
+								/>
 							</Route>
 
 							{/* admin users page */}
