@@ -44,17 +44,17 @@ const ContentManagementDayAddTask = () => {
 								value={taskType}
 								onChange={(e) => setTaskType(e.target.value)}
 							>
-								<MenuItem key={1} value={"Journaling"}>
+								<MenuItem key={1} value={"reading"}>
+									Reading
+								</MenuItem>
+								<MenuItem key={2} value={"journaling"}>
 									Journaling
 								</MenuItem>
-								<MenuItem key={2} value={"Media"}>
+								<MenuItem key={3} value={"media"}>
 									Media
 								</MenuItem>
-								<MenuItem key={3} value={"Questionnaire"}>
+								<MenuItem key={4} value={"questionnaire"}>
 									Questionnaire
-								</MenuItem>
-								<MenuItem key={4} value={"Reading"}>
-									Reading
 								</MenuItem>
 							</TextField>
 							{taskType === "Journaling" && (

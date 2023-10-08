@@ -18,9 +18,7 @@ const PasswordReset = () => {
 		try {
 			const response = await requestReset(emailRef.current.value);
 			const { resetLink } = response.data;
-			alert(
-				"You will soon be able to check your email for the link. For now you will just be redirected..."
-			);
+			alert("Please check your email for password reset instructions.");
 			navigate(`/${resetLink}`);
 		} catch (err) {
 			alert(`Error: ${err.message}`);
