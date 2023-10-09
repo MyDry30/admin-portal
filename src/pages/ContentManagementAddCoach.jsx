@@ -6,6 +6,7 @@ import Container from "../features/ui/container/Container";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
 import { MenuItem, TextField } from "@mui/material";
+import UploadButton from "../features/ui/uploadButton/UploadButton";
 
 const ContentManagementAddCoach = () => {
 	const navigate = useNavigate();
@@ -87,7 +88,7 @@ const ContentManagementAddCoach = () => {
 									Disabled
 								</MenuItem>
 							</TextField>
-							<h3>Todo: image upload input here</h3>
+							<UploadButton />
 						</div>
 					</div>
 				</Modal>

@@ -7,6 +7,7 @@ import Button from "../features/ui/button/Button";
 import ProfileImage from "../features/ui/profileImage/ProfileImage";
 import { useState } from "react";
 import { MenuItem, TextField } from "@mui/material";
+import UploadButton from "../features/ui/uploadButton/UploadButton";
 
 const ContentManagementCoach = () => {
 	const navigate = useNavigate();
@@ -113,7 +114,7 @@ const ContentManagementCoach = () => {
 										Disabled
 									</MenuItem>
 								</TextField>
-								<h3>Todo: image upload input here</h3>
+								<UploadButton />
 							</div>
 						</div>
 					</Modal>
