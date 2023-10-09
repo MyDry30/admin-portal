@@ -6,16 +6,24 @@ import {
 	MdSettings,
 	MdSupervisedUserCircle,
 } from "react-icons/md";
-import { StyledBody, StyledHeader, StyledNav } from "./Layout.styled";
+import {
+	FloatingNav,
+	StyledBody,
+	StyledHeader,
+	StyledNav,
+} from "./Layout.styled";
 import useLogout from "../auth/useLogout";
 import AccountIcon from "../ui/accountIcon/AccountIcon";
 import { useSelector } from "react-redux";
 import { getUser } from "../app/authSlice";
+import { useState } from "react";
 
 const Layout = () => {
 	const logout = useLogout();
 	const navigate = useNavigate();
 	const user = useSelector(getUser);
+
+	const [navOpen, setNavOpen] = useState(false);
 
 	const handleSignOut = async () => {
 		try {
@@ -23,6 +31,8 @@ const Layout = () => {
 			navigate("/");
 		} catch (err) {
 			console.error(err);
+		} finally {
+			setNavOpen(false);
 		}
 	};
 
@@ -33,9 +43,18 @@ const Layout = () => {
 					MyDry30
 				</Link>
 				<AccountIcon
-					onClick={handleSignOut}
+					onClick={() => setNavOpen(!navOpen)}
 					firstName={user?.firstName}
 				/>
+				{navOpen && (
+					<FloatingNav>
+						<div className="flex-column">
+							<h2>{`${user.firstName} ${user.lastName}`}</h2>
+							<p>{user.email}</p>
+						</div>
+						<Link onClick={handleSignOut}>Sign Out</Link>
+					</FloatingNav>
+				)}
 			</StyledHeader>
 			<StyledBody>
 				<StyledNav>
