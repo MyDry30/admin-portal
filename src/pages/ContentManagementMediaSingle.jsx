@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import ControlBar from "../features/ui/controlBar/ControlBar";
-import { MdArrowBack } from "react-icons/md";
+import { MdArrowBack, MdImage } from "react-icons/md";
 import Container from "../features/ui/container/Container";
 import { useState } from "react";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
 import { MenuItem, TextField } from "@mui/material";
+import UploadButton from "../features/ui/uploadButton/UploadButton";
 
 const ContentManagementMediaSingle = () => {
 	const navigate = useNavigate();
@@ -93,6 +94,11 @@ const ContentManagementMediaSingle = () => {
 									onChange={(e) =>
 										setDuration(e.target.value)
 									}
+								/>
+								<UploadButton />
+								<UploadButton
+									text="Add Image"
+									icon={<MdImage />}
 								/>
 							</div>
 						</div>

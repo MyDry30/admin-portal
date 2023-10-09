@@ -3,15 +3,15 @@ import React from "react";
 import { MdFileUpload } from "react-icons/md";
 import { StyledUploadButton } from "./StyledUploadButton";
 
-const UploadButton = () => {
+const UploadButton = ({ text, icon }) => {
 	return (
 		<StyledUploadButton>
 			<Button
 				component="label"
 				variant="contained"
-				startIcon={<MdFileUpload />}
+				startIcon={icon || <MdFileUpload />}
 			>
-				Upload File
+				{text || "Upload File"}
 				<input type="file" />
 			</Button>
 		</StyledUploadButton>
