@@ -1,12 +1,9 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Dialog from "../features/ui/dialog/Dialog";
 import Logo from "../assets/logo.svg";
-import { MdKey } from "react-icons/md";
-import { useEffect, useRef, useState } from "react";
-import Input from "../features/ui/input/Input";
+import { useRef, useState } from "react";
 import setPassword from "../features/api/setPassword";
 import Button from "../features/ui/button/Button";
-import { StyledPasswordP } from "../features/ui/passwordRequirements/PasswordRequirements.styled";
 import PasswordRequirements from "../features/ui/passwordRequirements/PasswordRequirements";
 import PasswordInput from "../features/ui/passwordInput/PasswordInput";
 
