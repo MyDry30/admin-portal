@@ -6,6 +6,7 @@ import { MdEmail } from "react-icons/md";
 import Button from "../features/ui/button/Button";
 import Logo from "../assets/logo.svg";
 import requestReset from "../features/api/requestReset";
+import sendResetEmail from "../features/api/sendResetEmail";
 
 const PasswordReset = () => {
 	const [loading, setLoading] = useState(false);
@@ -16,10 +17,19 @@ const PasswordReset = () => {
 		setLoading(true);
 		e.preventDefault();
 		try {
-			const response = await requestReset(emailRef.current.value);
-			const { resetLink } = response.data;
+			const email = emailRef.current.value;
+
+			const resetResponse = await requestReset(emailRef.current.value);
+			const { resetLink } = resetResponse.data;
+
+			await sendResetEmail({
+				email,
+				resetLink: `https://mydry30-staging.netlify.app/${resetLink}`,
+			});
+
+			emailRef.current.value = "";
+
 			alert("Please check your email for password reset instructions.");
-			navigate(`/${resetLink}`);
 		} catch (err) {
 			alert(`Error: ${err.message}`);
 		} finally {
