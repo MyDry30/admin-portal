@@ -2,10 +2,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Dialog from "../features/ui/dialog/Dialog";
 import Logo from "../assets/logo.svg";
 import { MdKey } from "react-icons/md";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "../features/ui/input/Input";
 import setPassword from "../features/api/setPassword";
 import Button from "../features/ui/button/Button";
+import { StyledPasswordP } from "../features/ui/passwordRequirements/PasswordRequirements.styled";
+import PasswordRequirements from "../features/ui/passwordRequirements/PasswordRequirements";
+import PasswordInput from "../features/ui/passwordInput/PasswordInput";
 
 const SetPassword = () => {
 	const [loading, setLoading] = useState(false);
@@ -14,18 +17,59 @@ const SetPassword = () => {
 	const passwordRef = useRef("");
 	const navigate = useNavigate();
 
+	const [passwordValid, setPasswordValid] = useState(false);
+	const [passwordReqs, setPasswordReqs] = useState({
+		lowercase: false,
+		uppercase: false,
+		number: false,
+		chars: false,
+	});
+
 	const handleSubmit = async (e) => {
-		setLoading(true);
 		e.preventDefault();
+
+		if (!passwordValid) {
+			return alert("Error: requirements not met.");
+		}
+
 		try {
+			setLoading(true);
 			await setPassword(token, passwordRef.current.value);
 			alert("Password has been reset. Navigating to sign-in page...");
 			navigate("/sign-in");
 		} catch (err) {
-			alert(`Error: ${err.message}`);
+			alert("Error: Unable to set password.");
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const handlePasswordChange = () => {
+		const password = passwordRef.current.value;
+
+		const lowercaseRegex = /[a-z]/;
+		const uppercaseRegex = /[A-Z]/;
+		const numberRegex = /[0-9]/;
+		const lengthRegex = /.{12,}/;
+
+		const isLowercaseValid = lowercaseRegex.test(password);
+		const isUppercaseValid = uppercaseRegex.test(password);
+		const isNumberValid = numberRegex.test(password);
+		const isLengthValid = lengthRegex.test(password);
+
+		setPasswordReqs({
+			lowercase: isLowercaseValid,
+			uppercase: isUppercaseValid,
+			number: isNumberValid,
+			chars: isLengthValid,
+		});
+
+		const isStrongPassword =
+			isLowercaseValid &&
+			isUppercaseValid &&
+			isNumberValid &&
+			isLengthValid;
+		setPasswordValid(isStrongPassword);
 	};
 
 	return (
@@ -47,19 +91,11 @@ const SetPassword = () => {
 					rowGap: "1.4rem",
 				}}
 			>
-				<Input
+				<PasswordInput
 					ref={passwordRef}
-					placeholder="Password"
-					type="password"
-					required={true}
-					icon={<MdKey />}
+					onChange={handlePasswordChange}
 				/>
-				<div>
-					<p>At least 1 lowercase letter</p>
-					<p>At least 1 uppercase letter</p>
-					<p>At least 1 number</p>
-					<p>At least 12 characters</p>
-				</div>
+				<PasswordRequirements passwordReqs={passwordReqs} />
 				<div className="flex-row justify-end">
 					<Button type="filled" loading={loading}>
 						Set Password
