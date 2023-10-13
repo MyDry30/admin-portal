@@ -4,9 +4,13 @@ import Container from "../features/ui/container/Container";
 import ControlBar from "../features/ui/controlBar/ControlBar";
 import StatsModal from "../features/ui/statsModal/StatsModal";
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 const Stats = () => {
-	const [date, setDate] = useState({ from: null, to: null });
+	const [date, setDate] = useState({
+		from: dayjs("01-01-2023"),
+		to: dayjs(new Date()),
+	});
 
 	useEffect(() => {
 		// const fromDate = date.from?.$d;
