@@ -1,7 +1,11 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import getAppUsers from "../features/api/getAppUsers";
 import { useEffect, useState } from "react";
+import SearchInput from "../features/ui/searchInput/SearchInput";
+import useSearch from "../features/search/useSearch";
+import { MdSearch } from "react-icons/md";
+import SubNav from "../features/ui/subNav/SubNav";
 
 const columns = [
 	{ field: "firstName", headerName: "First Name", width: 130 },
@@ -18,8 +22,10 @@ const initialState = {
 };
 
 const UserManagementInactive = () => {
-	const [users, setUsers] = useState([]);
 	const navigate = useNavigate();
+	const [users, setUsers] = useState([]);
+	const { searchRef, searchResults, handleSearchInput, setSearchResults } =
+		useSearch(users);
 
 	const getInactiveUsers = async () => {
 		try {
@@ -28,6 +34,7 @@ const UserManagementInactive = () => {
 				(user) => user.status === "disabled"
 			);
 			setUsers(disabledUsers);
+			setSearchResults(disabledUsers);
 		} catch (err) {
 			console.log(err.message);
 		}
@@ -43,14 +50,31 @@ const UserManagementInactive = () => {
 	};
 
 	return (
-		<DataGrid
-			rows={users}
-			columns={columns}
-			initialState={initialState}
-			onRowClick={handleRowClick}
-			pageSizeOptions={[10, 25, 50]}
-			className="custom-data-grid"
-		/>
+		<>
+			<div className="flex-row justify-sb">
+				<SearchInput>
+					<input
+						ref={searchRef}
+						type="text"
+						placeholder="Search"
+						onChange={handleSearchInput}
+					/>
+					<MdSearch />
+				</SearchInput>
+			</div>
+			<SubNav>
+				<NavLink to="/user-management/active">Active</NavLink>
+				<NavLink to="/user-management/inactive">Inactive</NavLink>
+			</SubNav>
+			<DataGrid
+				rows={searchResults}
+				columns={columns}
+				initialState={initialState}
+				onRowClick={handleRowClick}
+				pageSizeOptions={[10, 25, 50]}
+				className="custom-data-grid"
+			/>
+		</>
 	);
 };
 

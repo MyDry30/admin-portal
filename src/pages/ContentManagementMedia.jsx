@@ -1,11 +1,12 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import getMedia from "../features/api/getMedia";
 import SearchInput from "../features/ui/searchInput/SearchInput";
 import { MdSearch } from "react-icons/md";
 import Button from "../features/ui/button/Button";
 import SubNav from "../features/ui/subNav/SubNav";
 import { NavLink, useNavigate } from "react-router-dom";
+import useSearch from "../features/search/useSearch";
 
 const columns = [
 	{ field: "title", headerName: "Title", width: 200 },
@@ -21,19 +22,15 @@ const initialState = {
 
 const ContentManagementMedia = () => {
 	const navigate = useNavigate();
-	const searchRef = useRef("");
 	const [media, setMedia] = useState([]);
-
-	const handleSearchSubmit = async (e) => {
-		e.preventDefault();
-		const search = searchRef.current.value;
-		console.log(search);
-	};
+	const { searchRef, searchResults, handleSearchInput, setSearchResults } =
+		useSearch(media);
 
 	const handleGetMedia = async () => {
 		try {
 			const response = await getMedia();
 			setMedia(response.data);
+			setSearchResults(response.data);
 		} catch (err) {
 			console.log(err.message);
 		}
@@ -51,16 +48,15 @@ const ContentManagementMedia = () => {
 	return (
 		<>
 			<div className="flex-row justify-sb">
-				<form onSubmit={handleSearchSubmit}>
-					<SearchInput>
-						<input
-							ref={searchRef}
-							type="text"
-							placeholder="Search"
-						/>
-						<MdSearch />
-					</SearchInput>
-				</form>
+				<SearchInput>
+					<input
+						ref={searchRef}
+						type="text"
+						placeholder="Search"
+						onChange={handleSearchInput}
+					/>
+					<MdSearch />
+				</SearchInput>
 				<div className="flex-row column-gap-05">
 					<Button
 						onClick={() => navigate("/media/add")}
@@ -86,7 +82,7 @@ const ContentManagementMedia = () => {
 				</NavLink>
 			</SubNav>
 			<DataGrid
-				rows={media}
+				rows={searchResults}
 				columns={columns}
 				initialState={initialState}
 				pageSizeOptions={[10, 25, 50]}

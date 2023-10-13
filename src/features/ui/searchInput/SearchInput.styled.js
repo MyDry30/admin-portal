@@ -11,6 +11,10 @@ export const StyledSearchInput = styled.div`
 		outline: none;
 		border: 1px solid black;
 		border-radius: 3px;
+
+		&:disabled {
+			cursor: not-allowed;
+		}
 	}
 
 	svg {

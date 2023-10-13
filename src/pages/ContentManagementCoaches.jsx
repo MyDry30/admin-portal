@@ -1,11 +1,12 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import getCoaches from "../features/api/getCoaches";
 import { NavLink, useNavigate } from "react-router-dom";
 import SearchInput from "../features/ui/searchInput/SearchInput";
 import { MdSearch } from "react-icons/md";
 import Button from "../features/ui/button/Button";
 import SubNav from "../features/ui/subNav/SubNav";
+import useSearch from "../features/search/useSearch";
 
 const columns = [
 	{ field: "firstName", headerName: "First Name", width: 130 },
@@ -21,22 +22,20 @@ const initialState = {
 };
 
 const ContentManagementCoaches = () => {
-	const searchRef = useRef("");
-	const [coaches, setCoaches] = useState([]);
 	const navigate = useNavigate();
-
-	const handleSearchSubmit = async (e) => {
-		e.preventDefault();
-		const search = searchRef.current.value;
-		console.log(search);
-	};
+	const [coaches, setCoaches] = useState([]);
+	const { searchRef, searchResults, handleSearchInput, setSearchResults } =
+		useSearch(coaches);
 
 	const getAllCoaches = async () => {
 		try {
 			const response = await getCoaches();
-			setCoaches(
-				response.data?.map((coach, index) => ({ ...coach, id: index }))
-			);
+			const data = response.data?.map((coach, index) => ({
+				...coach,
+				id: index,
+			}));
+			setCoaches(data);
+			setSearchResults(data);
 		} catch (err) {
 			console.log(err.message);
 		}
@@ -54,16 +53,15 @@ const ContentManagementCoaches = () => {
 	return (
 		<>
 			<div className="flex-row justify-sb">
-				<form onSubmit={handleSearchSubmit}>
-					<SearchInput>
-						<input
-							ref={searchRef}
-							type="text"
-							placeholder="Search"
-						/>
-						<MdSearch />
-					</SearchInput>
-				</form>
+				<SearchInput>
+					<input
+						ref={searchRef}
+						type="text"
+						placeholder="Search"
+						onChange={handleSearchInput}
+					/>
+					<MdSearch />
+				</SearchInput>
 				<div className="flex-row column-gap-05">
 					<Button
 						onClick={() => navigate("/coaches/add")}
@@ -81,7 +79,7 @@ const ContentManagementCoaches = () => {
 				<NavLink to="/content-management/toolkit">Toolkit</NavLink>
 			</SubNav>
 			<DataGrid
-				rows={coaches}
+				rows={searchResults}
 				columns={columns}
 				initialState={initialState}
 				pageSizeOptions={[10, 25, 50]}

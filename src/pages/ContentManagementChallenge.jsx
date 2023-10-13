@@ -24,6 +24,7 @@ const ContentManagementChallenge = () => {
 							ref={searchRef}
 							type="text"
 							placeholder="Search"
+							disabled
 						/>
 						<MdSearch />
 					</SearchInput>
