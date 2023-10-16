@@ -11,6 +11,5 @@ export const StyledProfileImage = styled.div`
 		height: 100%;
 		border-radius: 80px;
 		border: none;
-		display: none;
 	}
 `;

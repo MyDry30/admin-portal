@@ -4,9 +4,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import Container from "../features/ui/container/Container";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MenuItem, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import getTasksByDay from "../features/api/getTasksByDay";
+
+const columns = [
+	{ field: "title", headerName: "Title", width: 250 },
+	{ field: "description", headerName: "Description", width: 500 },
+];
+const initialState = {
+	pagination: {
+		paginationModel: { page: 0, pageSize: 10 },
+	},
+};
 
 const ContentManagementDay = () => {
 	const { dayId } = useParams();
@@ -22,6 +33,7 @@ const ContentManagementDay = () => {
 	const [quoteContent, setQuoteContent] = useState("[Text]");
 	const [quoteAuthor, setQuoteAuthor] = useState("[Text]");
 
+	const [tasks, setTasks] = useState([]);
 	const [taskType, setTaskType] = useState("reading");
 
 	const handleSaveText = async () => {
@@ -32,6 +44,29 @@ const ContentManagementDay = () => {
 	};
 	const handleSaveTask = async () => {
 		console.log("save task for here");
+	};
+
+	const getTasks = async () => {
+		try {
+			const response = await getTasksByDay(dayId);
+			if (response?.length > 0) {
+				const filteredTasks = response.filter(
+					(task) => task.type === taskType
+				);
+				setTasks(filteredTasks);
+			}
+		} catch (err) {
+			console.log(err.message);
+		}
+	};
+
+	useEffect(() => {
+		getTasks();
+	}, [taskType]);
+
+	const handleRowClick = (params) => {
+		const { row } = params;
+		navigate(`/days/tasks/12345`);
 	};
 
 	return (
@@ -171,7 +206,9 @@ const ContentManagementDay = () => {
 						<div className="flex-column row-gap-2">
 							<div className="flex-row justify-sb">
 								<h2>Tasks for the Day</h2>
-								<Button onClick={() => navigate("/days/add")}>
+								<Button
+									onClick={() => navigate("/days/tasks/add")}
+								>
 									Add a Task
 								</Button>
 							</div>
@@ -200,12 +237,15 @@ const ContentManagementDay = () => {
 										Questionnaire
 									</MenuItem>
 								</TextField>
-								<DataGrid
-									rows={[]}
-									columns={[]}
-									initialState={{}}
-								/>
 							</div>
+							<DataGrid
+								rows={tasks}
+								columns={columns}
+								initialState={initialState}
+								pageSizeOptions={[10, 25, 50]}
+								className="custom-data-grid"
+								onRowClick={handleRowClick}
+							/>
 						</div>
 					</Modal>
 				)}

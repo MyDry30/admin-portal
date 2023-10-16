@@ -1,34 +1,45 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import DaysCalendar from "../features/ui/daysCalendar/DaysCalendar";
 import SearchInput from "../features/ui/searchInput/SearchInput";
 import { MdSearch } from "react-icons/md";
-import Button from "../features/ui/button/Button";
 import SubNav from "../features/ui/subNav/SubNav";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
+import getDays from "../features/api/getDays";
 
 const ContentManagementChallenge = () => {
 	const searchRef = useRef("");
+	const user = useSelector(getUser);
+	const [days, setDays] = useState(null);
 
-	const handleSearchSubmit = async (e) => {
-		e.preventDefault();
-		const search = searchRef.current.value;
-		console.log(search);
+	const populateDate = async (accessToken) => {
+		try {
+			const response = await getDays(accessToken);
+			setDays(response.data);
+		} catch (err) {
+			console.log(err.message);
+		}
 	};
+
+	useEffect(() => {
+		if (user.accessToken) {
+			populateDate(user.accessToken);
+		}
+	}, [user]);
 
 	return (
 		<>
 			<div className="flex-row justify-sb">
-				<form onSubmit={handleSearchSubmit}>
-					<SearchInput>
-						<input
-							ref={searchRef}
-							type="text"
-							placeholder="Search"
-							disabled
-						/>
-						<MdSearch />
-					</SearchInput>
-				</form>
+				<SearchInput>
+					<input
+						ref={searchRef}
+						type="text"
+						placeholder="Search"
+						disabled
+					/>
+					<MdSearch />
+				</SearchInput>
 			</div>
 			<SubNav>
 				<NavLink to="/content-management/30-day-challenge">
@@ -37,7 +48,7 @@ const ContentManagementChallenge = () => {
 				<NavLink to="/content-management/coaches">Coaches</NavLink>
 				<NavLink to="/content-management/toolkit">Toolkit</NavLink>
 			</SubNav>
-			<DaysCalendar />
+			{days ? <DaysCalendar days={days} /> : <h1>Loading...</h1>}
 		</>
 	);
 };

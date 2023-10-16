@@ -40,6 +40,7 @@ import ContentManagementAddForum from "./pages/ContentManagementAddForum";
 import ContentManagementForum from "./pages/ContentManagementForum";
 import ContentManagementAddMedia from "./pages/ContentManagementAddMedia";
 import ContentManagementMediaSingle from "./pages/ContentManagementMediaSingle";
+import ContentManagementChallengeDayTask from "./pages/ContentManagementChallengeDayTask";
 
 const customTheme = (outerTheme) =>
 	createTheme({
@@ -147,13 +148,23 @@ const App = () => {
 							</Route>
 							<Route path="days">
 								<Route
-									path="add"
-									element={<ContentManagementDayAddTask />}
-								/>
-								<Route
 									path=":dayId"
 									element={<ContentManagementDay />}
 								/>
+								<Route path="tasks">
+									<Route
+										path="add"
+										element={
+											<ContentManagementDayAddTask />
+										}
+									/>
+									<Route
+										path=":taskId"
+										element={
+											<ContentManagementChallengeDayTask />
+										}
+									/>
+								</Route>
 							</Route>
 							<Route path="coaches">
 								<Route
