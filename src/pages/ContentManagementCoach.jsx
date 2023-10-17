@@ -114,7 +114,7 @@ const ContentManagementCoach = () => {
 										Disabled
 									</MenuItem>
 								</TextField>
-								<UploadButton />
+								<UploadButton text="Add an Image" />
 							</div>
 						</div>
 					</Modal>

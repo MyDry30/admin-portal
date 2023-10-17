@@ -1,4 +1,4 @@
-import { MdArrowBack } from "react-icons/md";
+import { MdArrowBack, MdImage } from "react-icons/md";
 import ControlBar from "../features/ui/controlBar/ControlBar";
 import { useNavigate } from "react-router-dom";
 import Modal from "../features/ui/modal/Modal";
@@ -125,7 +125,10 @@ const ContentManagementDayAddTask = () => {
 											})
 										}
 									/>
-									<UploadButton text="Upload Image" />
+									<UploadButton
+										text="Add an Image"
+										icon={<MdImage />}
+									/>
 								</>
 							)}
 							{taskType === "journaling" && (
@@ -160,7 +163,7 @@ const ContentManagementDayAddTask = () => {
 											})
 										}
 									/>
-									<UploadButton text="Upload Image" />
+									<UploadButton text="Add an Image" />
 								</>
 							)}
 							{taskType === "media" && (
@@ -196,7 +199,7 @@ const ContentManagementDayAddTask = () => {
 										}
 									/>
 									<UploadButton />
-									<UploadButton text="Upload Image" />
+									<UploadButton text="Add an Image" />
 								</>
 							)}
 							{taskType === "questionnaire" && (

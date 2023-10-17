@@ -82,7 +82,10 @@ const ContentManagementAddMedia = () => {
 								onChange={(e) => setDuration(e.target.value)}
 							/>
 							<UploadButton />
-							<UploadButton text="Add Image" icon={<MdImage />} />
+							<UploadButton
+								text="Add an Image"
+								icon={<MdImage />}
+							/>
 						</div>
 					</div>
 				</Modal>

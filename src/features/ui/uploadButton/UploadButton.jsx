@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React from "react";
-import { MdFileUpload } from "react-icons/md";
+import { MdFolder } from "react-icons/md";
 import { StyledUploadButton } from "./StyledUploadButton";
 
 const UploadButton = ({ text, icon }) => {
@@ -9,9 +9,9 @@ const UploadButton = ({ text, icon }) => {
 			<Button
 				component="label"
 				variant="contained"
-				startIcon={icon || <MdFileUpload />}
+				startIcon={icon || <MdFolder />}
 			>
-				{text || "Upload File"}
+				{text || "Attach a File"}
 				<input type="file" />
 			</Button>
 		</StyledUploadButton>
