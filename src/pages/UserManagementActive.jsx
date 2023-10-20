@@ -1,11 +1,13 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import getAppUsers from "../features/api/getAppUsers";
 import useSearch from "../features/search/useSearch";
 import SearchInput from "../features/ui/searchInput/SearchInput";
 import { MdSearch } from "react-icons/md";
 import SubNav from "../features/ui/subNav/SubNav";
+import getAllUsers from "../features/api/users/getAllUsers";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
 
 const columns = [
 	{ field: "firstName", headerName: "First Name", width: 130 },
@@ -22,16 +24,17 @@ const initialState = {
 };
 
 const UserManagementActive = () => {
+	const user = useSelector(getUser);
 	const navigate = useNavigate();
-	const [users, setUsers] = useState([]);
+	const [users, setUsers] = useState(null);
 	const { searchRef, searchResults, handleSearchInput, setSearchResults } =
 		useSearch(users);
 
-	const getUsers = async () => {
+	const getUsers = async (accessToken) => {
 		try {
-			const response = await getAppUsers();
+			const response = await getAllUsers(accessToken);
 			const activeUsers = response.data?.filter(
-				(user) => user.status === "active"
+				(user) => user.status === "active" && user.role === "customer"
 			);
 			setUsers(activeUsers);
 			setSearchResults(activeUsers);
@@ -41,12 +44,14 @@ const UserManagementActive = () => {
 	};
 
 	useEffect(() => {
-		getUsers();
-	}, []);
+		if (user.accessToken) {
+			getUsers(user.accessToken);
+		}
+	}, [user]);
 
 	const handleRowClick = (params) => {
 		const { row } = params;
-		navigate("/users/123");
+		navigate(`/users/${row._id}`);
 	};
 
 	return (
@@ -66,14 +71,19 @@ const UserManagementActive = () => {
 				<NavLink to="/user-management/active">Active</NavLink>
 				<NavLink to="/user-management/inactive">Inactive</NavLink>
 			</SubNav>
-			<DataGrid
-				rows={searchResults}
-				columns={columns}
-				initialState={initialState}
-				onRowClick={handleRowClick}
-				pageSizeOptions={[10, 25, 50]}
-				className="custom-data-grid"
-			/>
+			{users ? (
+				<DataGrid
+					rows={searchResults}
+					columns={columns}
+					initialState={initialState}
+					onRowClick={handleRowClick}
+					pageSizeOptions={[10, 25, 50]}
+					className="custom-data-grid"
+					getRowId={(row) => row["_id"]}
+				/>
+			) : (
+				<h2>Loading...</h2>
+			)}
 		</>
 	);
 };

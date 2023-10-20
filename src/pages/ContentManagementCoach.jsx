@@ -1,23 +1,50 @@
 import { MdArrowBack } from "react-icons/md";
 import Container from "../features/ui/container/Container";
 import ControlBar from "../features/ui/controlBar/ControlBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
 import ProfileImage from "../features/ui/profileImage/ProfileImage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MenuItem, TextField } from "@mui/material";
 import UploadButton from "../features/ui/uploadButton/UploadButton";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
+import getCoachById from "../features/api/coaches/getCoachById";
 
 const ContentManagementCoach = () => {
+	const user = useSelector(getUser);
+	const { coachId } = useParams();
+
 	const navigate = useNavigate();
 	const [canEdit, setCanEdit] = useState(false);
 
-	const [firstName, setFirstName] = useState("Steve");
-	const [lastName, setLastName] = useState("Lament");
-	const [description, setDescription] = useState("[Text]");
-	const [link, setLink] = useState("[Text]");
-	const [status, setStatus] = useState("active");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [description, setDescription] = useState("");
+	const [link, setLink] = useState("");
+	const [status, setStatus] = useState("");
+
+	const fetchCoach = async (accessToken) => {
+		try {
+			const response = await getCoachById(accessToken, coachId);
+			const coach = response.data;
+
+			setFirstName(coach.firstName);
+			setLastName(coach.lastName);
+			setDescription(coach.description);
+			setLink(coach.bookingsLink);
+			setStatus(coach.status);
+		} catch (err) {
+			console.log(err.message);
+		}
+	};
+
+	useEffect(() => {
+		if (user.accessToken) {
+			fetchCoach(user.accessToken);
+		}
+	}, [user]);
 
 	const handleSaveButton = async () => {
 		if (!firstName) {
@@ -50,7 +77,7 @@ const ContentManagementCoach = () => {
 							cursor: "pointer",
 						}}
 					/>
-					<h2>Content Management / [Coach Name]</h2>
+					<h2>Content Management / {`${firstName} ${lastName}`}</h2>
 				</div>
 			</ControlBar>
 			<Container>

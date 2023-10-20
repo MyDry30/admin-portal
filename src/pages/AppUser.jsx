@@ -5,19 +5,45 @@ import Modal from "../features/ui/modal/Modal";
 import Container from "../features/ui/container/Container";
 import Button from "../features/ui/button/Button";
 import StatsTable from "../features/ui/statsTable/StatsTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MenuItem, TextField } from "@mui/material";
+import getUserById from "../features/api/getUserById";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
 
 const AppUser = () => {
+	const user = useSelector(getUser);
+
 	const navigate = useNavigate();
 	const { userId } = useParams();
 	const [canEdit, setCanEdit] = useState(false);
 
-	const [firstName, setFirstName] = useState("Steve");
-	const [lastName, setLastName] = useState("Lament");
-	const [email, setEmail] = useState("mbell@tepia.co");
-	const [journey, setJourney] = useState("dry");
-	const [status, setStatus] = useState("active");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [email, setEmail] = useState("");
+	const [journey, setJourney] = useState("");
+	const [status, setStatus] = useState("");
+
+	const fetchUser = async (accessToken) => {
+		try {
+			const response = await getUserById(accessToken, userId);
+			const userData = response.data;
+
+			setFirstName(userData.firstName);
+			setLastName(userData.lastName);
+			setEmail(userData.email);
+			setJourney(userData.journey);
+			setStatus(userData.status);
+		} catch (err) {
+			console.log(err.message);
+		}
+	};
+
+	useEffect(() => {
+		if (user.accessToken) {
+			fetchUser(user.accessToken);
+		}
+	}, [user]);
 
 	const handleSaveButton = async () => {
 		if (!firstName) {
@@ -50,7 +76,7 @@ const AppUser = () => {
 							cursor: "pointer",
 						}}
 					/>
-					<h2>User Management / Michelle Bell</h2>
+					<h2>User Management / {`${firstName} ${lastName}`}</h2>
 				</div>
 			</ControlBar>
 			<Container>
@@ -132,23 +158,23 @@ const AppUser = () => {
 							<div className="flex-column row-gap-2">
 								<div className="flex-column row-gap-05">
 									<p className="small-text">First Name</p>
-									<p>Steve</p>
+									<p>{firstName}</p>
 								</div>
 								<div className="flex-column row-gap-05">
 									<p className="small-text">Last Name</p>
-									<p>Lament</p>
+									<p>{lastName}</p>
 								</div>
 								<div className="flex-column row-gap-05">
 									<p className="small-text">Email</p>
-									<p>mbell@tepia.co</p>
+									<p>{email}</p>
 								</div>
 								<div className="flex-column row-gap-05">
 									<p className="small-text">Journey</p>
-									<p>Moderation</p>
+									<p>{journey}</p>
 								</div>
 								<div className="flex-column row-gap-05">
 									<p className="small-text">Status</p>
-									<p>Active</p>
+									<p>{status}</p>
 								</div>
 							</div>
 						</div>
@@ -161,7 +187,10 @@ const AppUser = () => {
 							rows={[
 								{ key: "Progress", value: "5/30" },
 								{ key: "Day Streak", value: "5" },
-								{ key: "Total Tasks Completed", value: "35" },
+								{
+									key: "Total Tasks Completed",
+									value: "35",
+								},
 								{ key: "Total Urges", value: "12" },
 								{ key: "Current Appointments", value: "2" },
 								{ key: "Completed Cycles", value: "2" },

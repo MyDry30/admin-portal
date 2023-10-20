@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ControlBar from "../features/ui/controlBar/ControlBar";
 import { MdArrowBack } from "react-icons/md";
@@ -6,19 +6,43 @@ import Container from "../features/ui/container/Container";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
 import { MenuItem, TextField } from "@mui/material";
+import { useSelector } from "react-redux";
+import getUserById from "../features/api/getUserById";
+import { getUser } from "../features/app/authSlice";
 
 const AdminUser = () => {
+	const user = useSelector(getUser);
+
 	const navigate = useNavigate();
 	const { userId } = useParams();
 	const [canEdit, setCanEdit] = useState(false);
 
-	const [firstName, setFirstName] = useState("Steve");
-	const [lastName, setLastName] = useState("Lament");
-	const [email, setEmail] = useState("mbell@tepia.co");
-	const [journey, setJourney] = useState("dry");
-	const [status, setStatus] = useState("active");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [email, setEmail] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
+	const [status, setStatus] = useState("");
 
-	const handleBackClick = () => navigate(-1);
+	const fetchUser = async (accessToken) => {
+		try {
+			const response = await getUserById(accessToken, userId);
+			const userData = response.data;
+
+			setFirstName(userData.firstName);
+			setLastName(userData.lastName);
+			setEmail(userData.email);
+			setPhoneNumber(userData.phoneNumber);
+			setStatus(userData.status);
+		} catch (err) {
+			console.log(err.message);
+		}
+	};
+
+	useEffect(() => {
+		if (user.accessToken) {
+			fetchUser(user.accessToken);
+		}
+	}, [user]);
 
 	const handleSaveButton = async () => {
 		if (!firstName) {
@@ -44,14 +68,14 @@ const AdminUser = () => {
 			<ControlBar>
 				<div className="flex-row align-center column-gap-1">
 					<MdArrowBack
-						onClick={handleBackClick}
+						onClick={() => navigate(-1)}
 						style={{
 							width: "32px",
 							height: "32px",
 							cursor: "pointer",
 						}}
 					/>
-					<h2>Admin Users / Steve Lament</h2>
+					<h2>Admin Users / {`${firstName} ${lastName}`}</h2>
 				</div>
 			</ControlBar>
 			<Container>
@@ -93,18 +117,12 @@ const AdminUser = () => {
 									onChange={(e) => setEmail(e.target.value)}
 								/>
 								<TextField
-									select
-									label="Journey"
-									value={journey}
-									onChange={(e) => setJourney(e.target.value)}
-								>
-									<MenuItem key={1} value={"dry"}>
-										Dry
-									</MenuItem>
-									<MenuItem key={2} value={"moderation"}>
-										Moderation
-									</MenuItem>
-								</TextField>
+									label="Phone Number"
+									value={phoneNumber}
+									onChange={(e) =>
+										setPhoneNumber(e.target.value)
+									}
+								/>
 								<TextField
 									select
 									label="Status"
@@ -133,23 +151,23 @@ const AdminUser = () => {
 							<div className="flex-column row-gap-2">
 								<div className="flex-column row-gap-05">
 									<p className="small-text">First Name</p>
-									<p>Steve</p>
+									<p>{firstName}</p>
 								</div>
 								<div className="flex-column row-gap-05">
 									<p className="small-text">Last Name</p>
-									<p>Lament</p>
+									<p>{lastName}</p>
 								</div>
 								<div className="flex-column row-gap-05">
 									<p className="small-text">Email</p>
-									<p>mbell@tepia.co</p>
+									<p>{email}</p>
 								</div>
 								<div className="flex-column row-gap-05">
-									<p className="small-text">Journey</p>
-									<p>Moderation</p>
+									<p className="small-text">Phone Number</p>
+									<p>{phoneNumber}</p>
 								</div>
 								<div className="flex-column row-gap-05">
 									<p className="small-text">Status</p>
-									<p>Active</p>
+									<p>{status}</p>
 								</div>
 							</div>
 						</div>

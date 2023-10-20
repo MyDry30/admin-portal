@@ -16,7 +16,7 @@ const ContentManagementChallenge = () => {
 	const populateDate = async (accessToken) => {
 		try {
 			const response = await getDays(accessToken);
-			setDays(response.data);
+			setDays(response.data.filter((day) => day.number <= 30));
 		} catch (err) {
 			console.log(err.message);
 		}
@@ -48,7 +48,7 @@ const ContentManagementChallenge = () => {
 				<NavLink to="/content-management/coaches">Coaches</NavLink>
 				<NavLink to="/content-management/toolkit">Toolkit</NavLink>
 			</SubNav>
-			{days ? <DaysCalendar days={days} /> : <h1>Loading...</h1>}
+			{days ? <DaysCalendar days={days} /> : <h2>Loading...</h2>}
 		</>
 	);
 };

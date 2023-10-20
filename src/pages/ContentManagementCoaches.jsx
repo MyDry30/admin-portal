@@ -7,12 +7,14 @@ import { MdSearch } from "react-icons/md";
 import Button from "../features/ui/button/Button";
 import SubNav from "../features/ui/subNav/SubNav";
 import useSearch from "../features/search/useSearch";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
 
 const columns = [
 	{ field: "firstName", headerName: "First Name", width: 130 },
 	{ field: "lastName", headerName: "Last Name", width: 130 },
 	{ field: "description", headerName: "Descripton", width: 300 },
-	{ field: "link", headerName: "Link", width: 150 },
+	{ field: "bookingsLink", headerName: "Link", width: 150 },
 	{ field: "status", headerName: "Status", width: 90 },
 ];
 const initialState = {
@@ -22,32 +24,33 @@ const initialState = {
 };
 
 const ContentManagementCoaches = () => {
+	const user = useSelector(getUser);
+
 	const navigate = useNavigate();
-	const [coaches, setCoaches] = useState([]);
+	const [coaches, setCoaches] = useState(null);
 	const { searchRef, searchResults, handleSearchInput, setSearchResults } =
 		useSearch(coaches);
 
-	const getAllCoaches = async () => {
+	const getAllCoaches = async (accessToken) => {
 		try {
-			const response = await getCoaches();
-			const data = response.data?.map((coach, index) => ({
-				...coach,
-				id: index,
-			}));
-			setCoaches(data);
-			setSearchResults(data);
+			const response = await getCoaches(accessToken);
+			const coachData = response.data;
+			setCoaches(coachData);
+			setSearchResults(coachData);
 		} catch (err) {
 			console.log(err.message);
 		}
 	};
 
 	useEffect(() => {
-		getAllCoaches();
-	}, []);
+		if (user.accessToken) {
+			getAllCoaches(user.accessToken);
+		}
+	}, [user]);
 
 	const handleRowClick = (params) => {
 		const { row } = params;
-		navigate("/coaches/12345");
+		navigate(`/coaches/${row._id}`);
 	};
 
 	return (
@@ -78,14 +81,19 @@ const ContentManagementCoaches = () => {
 				<NavLink to="/content-management/coaches">Coaches</NavLink>
 				<NavLink to="/content-management/toolkit">Toolkit</NavLink>
 			</SubNav>
-			<DataGrid
-				rows={searchResults}
-				columns={columns}
-				initialState={initialState}
-				pageSizeOptions={[10, 25, 50]}
-				onRowClick={handleRowClick}
-				className="custom-data-grid"
-			/>
+			{coaches ? (
+				<DataGrid
+					rows={searchResults}
+					columns={columns}
+					initialState={initialState}
+					pageSizeOptions={[10, 25, 50]}
+					onRowClick={handleRowClick}
+					className="custom-data-grid"
+					getRowId={(row) => row["_id"]}
+				/>
+			) : (
+				<h2>Loading...</h2>
+			)}
 		</>
 	);
 };
