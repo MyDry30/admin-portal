@@ -8,6 +8,9 @@ import { useEffect, useState } from "react";
 import { MenuItem, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import getTasksByDay from "../features/api/getTasksByDay";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
+import getDayByNumber from "../features/api/days/getDayByNumber";
 
 const columns = [
 	{ field: "title", headerName: "Title", width: 250 },
@@ -20,14 +23,18 @@ const initialState = {
 };
 
 const ContentManagementDay = () => {
-	const { dayId } = useParams();
+	const user = useSelector(getUser);
+	const { dayNumber } = useParams();
+
 	const navigate = useNavigate();
+
+	const [day, setDay] = useState(null);
 
 	const [canEditText, setCanEditText] = useState(false);
 	const [canEditQuote, setCanEditQuote] = useState(false);
 	const [canEditTask, setCanEditTask] = useState(false);
 
-	const [textContent, setTextContent] = useState("[Text]");
+	const [textContent, setTextContent] = useState("");
 
 	const [quoteTitle, setQuoteTitle] = useState("[Text]");
 	const [quoteContent, setQuoteContent] = useState("[Text]");
@@ -35,6 +42,25 @@ const ContentManagementDay = () => {
 
 	const [tasks, setTasks] = useState([]);
 	const [taskType, setTaskType] = useState("reading");
+
+	const fetchDayByNumber = async (accessToken) => {
+		try {
+			const response = await getDayByNumber(accessToken, dayNumber);
+			const dayData = response.data;
+			console.log(dayData);
+			setDay(dayData);
+
+			setTextContent(dayData.text);
+		} catch (err) {
+			console.log(err.message);
+		}
+	};
+
+	useEffect(() => {
+		if (user.accessToken) {
+			fetchDayByNumber(user.accessToken);
+		}
+	}, [user]);
 
 	const handleSaveText = async () => {
 		console.log("save text form here");
@@ -48,7 +74,7 @@ const ContentManagementDay = () => {
 
 	const getTasks = async () => {
 		try {
-			const response = await getTasksByDay(dayId);
+			const response = await getTasksByDay(dayNumber);
 			if (response?.length > 0) {
 				const filteredTasks = response.filter(
 					(task) => task.type === taskType
@@ -69,6 +95,14 @@ const ContentManagementDay = () => {
 		navigate(`/days/tasks/12345`);
 	};
 
+	if (!day) {
+		return (
+			<Container>
+				<h2>Loading...</h2>
+			</Container>
+		);
+	}
+
 	return (
 		<>
 			<ControlBar>
@@ -81,7 +115,7 @@ const ContentManagementDay = () => {
 							cursor: "pointer",
 						}}
 					/>
-					<h2>Content Management / Day 3</h2>
+					<h2>Content Management / Day {day.number}</h2>
 				</div>
 			</ControlBar>
 			<Container>

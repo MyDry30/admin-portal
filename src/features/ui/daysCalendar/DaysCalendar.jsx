@@ -8,7 +8,10 @@ const DaysCalendar = ({ days }) => {
 	return (
 		<StyledDaysChallenge>
 			{days?.map((day) => (
-				<div key={day._id} onClick={() => navigate("/days/12345")}>
+				<div
+					key={day._id}
+					onClick={() => navigate(`/days/${day.number}`)}
+				>
 					<p>{`${day?.text}`}</p>
 					<MdArrowRight />
 				</div>

@@ -148,7 +148,7 @@ const App = () => {
 							</Route>
 							<Route path="days">
 								<Route
-									path=":dayId"
+									path=":dayNumber"
 									element={<ContentManagementDay />}
 								/>
 								<Route path="tasks">
