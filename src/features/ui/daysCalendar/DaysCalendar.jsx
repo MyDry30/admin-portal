@@ -12,7 +12,7 @@ const DaysCalendar = ({ days }) => {
 					key={day._id}
 					onClick={() => navigate(`/days/${day.number}`)}
 				>
-					<p>{`${day?.text}`}</p>
+					<p>{`Day ${day?.number}`}</p>
 					<MdArrowRight />
 				</div>
 			))}

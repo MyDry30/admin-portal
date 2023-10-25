@@ -147,17 +147,19 @@ const App = () => {
 								</Route>
 							</Route>
 							<Route path="days">
-								<Route
-									path=":dayNumber"
-									element={<ContentManagementDay />}
-								/>
-								<Route path="tasks">
+								<Route path=":dayNumber">
 									<Route
-										path="add"
+										index
+										element={<ContentManagementDay />}
+									/>
+									<Route
+										path="tasks/add"
 										element={
 											<ContentManagementDayAddTask />
 										}
 									/>
+								</Route>
+								<Route path="tasks">
 									<Route
 										path=":taskId"
 										element={

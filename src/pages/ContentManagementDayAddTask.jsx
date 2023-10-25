@@ -1,6 +1,6 @@
 import { MdArrowBack, MdImage } from "react-icons/md";
 import ControlBar from "../features/ui/controlBar/ControlBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import UploadButton from "../features/ui/uploadButton/UploadButton";
 
 const ContentManagementDayAddTask = () => {
 	const navigate = useNavigate();
+	const { dayNumber } = useParams();
 
 	const [taskType, setTaskType] = useState("");
 	const [readingForm, setReadingForm] = useState({
@@ -53,7 +54,7 @@ const ContentManagementDayAddTask = () => {
 							cursor: "pointer",
 						}}
 					/>
-					<h2>Content Management / Add Task for Day #</h2>
+					<h2>Content Management / Add Task for Day {dayNumber}</h2>
 				</div>
 			</ControlBar>
 			<Container>

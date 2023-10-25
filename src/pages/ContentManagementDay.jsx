@@ -7,10 +7,10 @@ import Button from "../features/ui/button/Button";
 import { useEffect, useState } from "react";
 import { MenuItem, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import getTasksByDay from "../features/api/getTasksByDay";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
 import getDayByNumber from "../features/api/days/getDayByNumber";
+import editDay from "../features/api/days/editDay";
 
 const columns = [
 	{ field: "title", headerName: "Title", width: 250 },
@@ -32,24 +32,32 @@ const ContentManagementDay = () => {
 
 	const [canEditText, setCanEditText] = useState(false);
 	const [canEditQuote, setCanEditQuote] = useState(false);
-	const [canEditTask, setCanEditTask] = useState(false);
 
 	const [textContent, setTextContent] = useState("");
 
-	const [quoteTitle, setQuoteTitle] = useState("[Text]");
-	const [quoteContent, setQuoteContent] = useState("[Text]");
-	const [quoteAuthor, setQuoteAuthor] = useState("[Text]");
+	const [quoteTitle, setQuoteTitle] = useState("");
+	const [quoteContent, setQuoteContent] = useState("");
+	const [quoteAuthor, setQuoteAuthor] = useState("");
 
 	const [tasks, setTasks] = useState([]);
+	const [filteredTasks, setFilteredTasks] = useState([]);
 	const [taskType, setTaskType] = useState("reading");
 
 	const fetchDayByNumber = async (accessToken) => {
 		try {
 			const response = await getDayByNumber(accessToken, dayNumber);
 			const dayData = response.data;
-			console.log(dayData);
-			setDay(dayData);
 
+			const { quote } = dayData;
+			setQuoteTitle(quote.title);
+			setQuoteContent(quote.content);
+			setQuoteAuthor(quote.author);
+
+			const { tasks } = dayData;
+			setTasks(tasks);
+			setFilteredTasks(tasks.filter((task) => task.type === taskType));
+
+			setDay(dayData);
 			setTextContent(dayData.text);
 		} catch (err) {
 			console.log(err.message);
@@ -62,37 +70,45 @@ const ContentManagementDay = () => {
 		}
 	}, [user]);
 
-	const handleSaveText = async () => {
-		console.log("save text form here");
-	};
-	const handleSaveQuote = async () => {
-		console.log("save quote form here");
-	};
-	const handleSaveTask = async () => {
-		console.log("save task for here");
-	};
-
-	const getTasks = async () => {
-		try {
-			const response = await getTasksByDay(dayNumber);
-			if (response?.length > 0) {
-				const filteredTasks = response.filter(
-					(task) => task.type === taskType
-				);
-				setTasks(filteredTasks);
-			}
-		} catch (err) {
-			console.log(err.message);
-		}
-	};
-
 	useEffect(() => {
-		getTasks();
+		setFilteredTasks(tasks.filter((task) => task.type === taskType));
 	}, [taskType]);
 
 	const handleRowClick = (params) => {
 		const { row } = params;
 		navigate(`/days/tasks/12345`);
+	};
+
+	const handleSaveText = async () => {
+		try {
+			await editDay(user.accessToken, day._id, {
+				text: textContent,
+			});
+		} catch (err) {
+			console.warn(err.message);
+		} finally {
+			setCanEditText(false);
+		}
+	};
+
+	const handleSaveQuote = async () => {
+		try {
+			await editDay(user.accessToken, day._id, {
+				quote: {
+					title: quoteTitle,
+					content: quoteContent,
+					author: quoteAuthor,
+				},
+			});
+		} catch (err) {
+			console.warn(err.message);
+		} finally {
+			setCanEditQuote(false);
+		}
+	};
+
+	const handleSaveTask = async () => {
+		console.log("save task for here");
 	};
 
 	if (!day) {
@@ -125,9 +141,11 @@ const ContentManagementDay = () => {
 							<div className="flex-row justify-sb">
 								<h2>Text of the Day</h2>
 								<div className="flex-row column-gap-05">
-									<Button onClick={handleSaveText}>
-										Save
-									</Button>
+									{day && user?.accessToken && (
+										<Button onClick={handleSaveText}>
+											Save
+										</Button>
+									)}
 									<Button
 										onClick={() => setCanEditText(false)}
 									>
@@ -171,9 +189,11 @@ const ContentManagementDay = () => {
 							<div className="flex-row justify-sb">
 								<h2>Daily Quote</h2>
 								<div className="flex-row column-gap-05">
-									<Button onClick={handleSaveQuote}>
-										Save
-									</Button>
+									{day && user?.accessToken && (
+										<Button onClick={handleSaveQuote}>
+											Save
+										</Button>
+									)}
 									<Button
 										onClick={() => setCanEditQuote(false)}
 									>
@@ -227,62 +247,59 @@ const ContentManagementDay = () => {
 								<p>{quoteContent}</p>
 							</div>
 							<div className="flex-column row-gap-05">
-								<p className="small-text">Quote Author</p>
+								<p className="small-text">Author</p>
 								<p>{quoteAuthor}</p>
 							</div>
 						</div>
 					</Modal>
 				)}
-				{canEditTask ? (
-					<Modal></Modal>
-				) : (
-					<Modal>
-						<div className="flex-column row-gap-2">
-							<div className="flex-row justify-sb">
-								<h2>Tasks for the Day</h2>
-								<Button
-									onClick={() => navigate("/days/tasks/add")}
-								>
-									Add a Task
-								</Button>
-							</div>
-							<div
-								className="flex-column row-gap-2"
-								style={{ width: "400px" }}
+				<Modal>
+					<div className="flex-column row-gap-2">
+						<div className="flex-row justify-sb">
+							<h2>Tasks for the Day</h2>
+							<Button
+								onClick={() =>
+									navigate(`/days/${day.number}/tasks/add`)
+								}
 							>
-								<TextField
-									select
-									label="Task Type"
-									value={taskType}
-									onChange={(e) =>
-										setTaskType(e.target.value)
-									}
-								>
-									<MenuItem key={1} value={"reading"}>
-										Reading
-									</MenuItem>
-									<MenuItem key={2} value={"journaling"}>
-										Journaling
-									</MenuItem>
-									<MenuItem key={3} value={"media"}>
-										Media
-									</MenuItem>
-									<MenuItem key={4} value={"questionnaire"}>
-										Questionnaire
-									</MenuItem>
-								</TextField>
-							</div>
-							<DataGrid
-								rows={tasks}
-								columns={columns}
-								initialState={initialState}
-								pageSizeOptions={[10, 25, 50]}
-								className="custom-data-grid"
-								onRowClick={handleRowClick}
-							/>
+								Add a Task
+							</Button>
 						</div>
-					</Modal>
-				)}
+						<div
+							className="flex-column row-gap-2"
+							style={{ width: "400px" }}
+						>
+							<TextField
+								select
+								label="Task Type"
+								value={taskType}
+								onChange={(e) => setTaskType(e.target.value)}
+							>
+								<MenuItem key={1} value={"reading"}>
+									Reading
+								</MenuItem>
+								<MenuItem key={2} value={"journaling"}>
+									Journaling
+								</MenuItem>
+								<MenuItem key={3} value={"media"}>
+									Media
+								</MenuItem>
+								<MenuItem key={4} value={"questionnaire"}>
+									Questionnaire
+								</MenuItem>
+							</TextField>
+						</div>
+						<DataGrid
+							rows={filteredTasks}
+							columns={columns}
+							initialState={initialState}
+							pageSizeOptions={[10, 25, 50]}
+							className="custom-data-grid"
+							onRowClick={handleRowClick}
+							getRowId={(row) => row["_id"]}
+						/>
+					</div>
+				</Modal>
 			</Container>
 		</>
 	);
