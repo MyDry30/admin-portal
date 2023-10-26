@@ -11,16 +11,12 @@ import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
 import getDayByNumber from "../features/api/days/getDayByNumber";
 import editDay from "../features/api/days/editDay";
+import { INITIAL_STATE } from "../constants";
 
 const columns = [
 	{ field: "title", headerName: "Title", width: 250 },
 	{ field: "description", headerName: "Description", width: 500 },
 ];
-const initialState = {
-	pagination: {
-		paginationModel: { page: 0, pageSize: 10 },
-	},
-};
 
 const ContentManagementDay = () => {
 	const user = useSelector(getUser);
@@ -47,6 +43,9 @@ const ContentManagementDay = () => {
 		try {
 			const response = await getDayByNumber(accessToken, dayNumber);
 			const dayData = response.data;
+			setDay(dayData);
+
+			setTextContent(dayData.text);
 
 			const { quote } = dayData;
 			setQuoteTitle(quote.title);
@@ -56,14 +55,10 @@ const ContentManagementDay = () => {
 			const { tasks } = dayData;
 			setTasks(tasks);
 			setFilteredTasks(tasks.filter((task) => task.type === taskType));
-
-			setDay(dayData);
-			setTextContent(dayData.text);
 		} catch (err) {
 			console.log(err.message);
 		}
 	};
-
 	useEffect(() => {
 		if (user.accessToken) {
 			fetchDayByNumber(user.accessToken);
@@ -76,39 +71,51 @@ const ContentManagementDay = () => {
 
 	const handleRowClick = (params) => {
 		const { row } = params;
-		navigate(`/days/tasks/12345`);
+		navigate(`/days/tasks/${row._id}`);
 	};
 
 	const handleSaveText = async () => {
 		try {
-			await editDay(user.accessToken, day._id, {
+			const response = await editDay(user.accessToken, day._id, {
 				text: textContent,
 			});
+			const { text } = response.data;
+			setDay({ ...day, text });
 		} catch (err) {
 			console.warn(err.message);
 		} finally {
 			setCanEditText(false);
 		}
 	};
+	const handleCancelText = () => {
+		setCanEditText(false);
+		setTextContent(day.text);
+	};
 
 	const handleSaveQuote = async () => {
 		try {
-			await editDay(user.accessToken, day._id, {
+			const response = await editDay(user.accessToken, day._id, {
 				quote: {
 					title: quoteTitle,
 					content: quoteContent,
 					author: quoteAuthor,
 				},
 			});
+			const { quote } = response.data;
+			setQuoteTitle(quote.title);
+			setQuoteContent(quote.content);
+			setQuoteAuthor(quote.author);
 		} catch (err) {
 			console.warn(err.message);
 		} finally {
 			setCanEditQuote(false);
 		}
 	};
-
-	const handleSaveTask = async () => {
-		console.log("save task for here");
+	const handleCancelQuote = () => {
+		setCanEditQuote(false);
+		setQuoteTitle(day.quote.title);
+		setQuoteContent(day.quote.content);
+		setQuoteAuthor(day.quote.author);
 	};
 
 	if (!day) {
@@ -146,9 +153,7 @@ const ContentManagementDay = () => {
 											Save
 										</Button>
 									)}
-									<Button
-										onClick={() => setCanEditText(false)}
-									>
+									<Button onClick={handleCancelText}>
 										Cancel
 									</Button>
 								</div>
@@ -178,7 +183,7 @@ const ContentManagementDay = () => {
 							</div>
 							<div className="flex-column row-gap-05">
 								<p className="small-text">Content</p>
-								<p>{textContent}</p>
+								<p>{day.text}</p>
 							</div>
 						</div>
 					</Modal>
@@ -194,9 +199,7 @@ const ContentManagementDay = () => {
 											Save
 										</Button>
 									)}
-									<Button
-										onClick={() => setCanEditQuote(false)}
-									>
+									<Button onClick={handleCancelQuote}>
 										Cancel
 									</Button>
 								</div>
@@ -292,7 +295,7 @@ const ContentManagementDay = () => {
 						<DataGrid
 							rows={filteredTasks}
 							columns={columns}
-							initialState={initialState}
+							initialState={INITIAL_STATE}
 							pageSizeOptions={[10, 25, 50]}
 							className="custom-data-grid"
 							onRowClick={handleRowClick}

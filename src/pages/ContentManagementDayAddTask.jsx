@@ -7,8 +7,12 @@ import { useState } from "react";
 import { MenuItem, TextField } from "@mui/material";
 import Container from "../features/ui/container/Container";
 import UploadButton from "../features/ui/uploadButton/UploadButton";
+import addTaskByDay from "../features/api/days/addTaskByDay";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
 
 const ContentManagementDayAddTask = () => {
+	const user = useSelector(getUser);
 	const navigate = useNavigate();
 	const { dayNumber } = useParams();
 
@@ -17,12 +21,14 @@ const ContentManagementDayAddTask = () => {
 		title: "",
 		description: "",
 		timeToComplete: "",
+		content: "",
 		image: "",
 	});
 	const [journalingForm, setJournalingForm] = useState({
 		title: "",
 		description: "",
 		timeToComplete: "",
+		content: "",
 		image: "",
 	});
 	const [mediaForm, setMediaForm] = useState({
@@ -34,6 +40,7 @@ const ContentManagementDayAddTask = () => {
 	});
 	const [questionForm, setQuestionForm] = useState({
 		title: "",
+		question: "",
 		answerOption1: "",
 		answerOption2: "",
 		answerOption3: "",
@@ -41,6 +48,105 @@ const ContentManagementDayAddTask = () => {
 		timeToComplete: "",
 		duration: "",
 	});
+
+	const addTask = async () => {
+		let body = {};
+		try {
+			if (!user.accessToken) {
+				throw new Error("Unable to add task to day.");
+			}
+
+			if (taskType === "reading") {
+				body = {
+					type: "reading",
+					title: readingForm.title,
+					description: readingForm.description,
+					content: readingForm.content,
+					completionTime: readingForm.timeToComplete,
+				};
+			} else if (taskType === "journaling") {
+				body = {
+					type: "journaling",
+					title: journalingForm.title,
+					description: journalingForm.description,
+					content: journalingForm.content,
+					completionTime: journalingForm.timeToComplete,
+				};
+			} else if (taskType === "media") {
+				body = {
+					type: "media",
+					title: mediaForm.title,
+					description: mediaForm.description,
+					duration: mediaForm.duration,
+				};
+			} else if (taskType === "questionnaire") {
+				body = {
+					type: "questionnaire",
+					title: questionForm.title,
+					description: questionForm.question,
+					answers: [
+						answerOption1,
+						answerOption2,
+						answerOption3,
+						answerOption4,
+					],
+					completionTime: questionForm.timeToComplete,
+					duration: questionForm.duration,
+				};
+			} else {
+				console.error(`Unknown task type: ${taskType}`);
+				return;
+			}
+
+			console.log(body);
+			const response = await addTaskByDay(
+				user.accessToken,
+				dayNumber,
+				body
+			);
+			console.log(response.body);
+		} catch (err) {
+			console.warn(err.message);
+		}
+	};
+	const resetForm = () => {
+		setTaskType("");
+		setReadingForm({
+			title: "",
+			description: "",
+			timeToComplete: "",
+			content: "",
+			image: "",
+		});
+		setJournalingForm({
+			title: "",
+			description: "",
+			timeToComplete: "",
+			content: "",
+			image: "",
+		});
+		setMediaForm({
+			title: "",
+			description: "",
+			duration: "",
+			file: "",
+			image: "",
+		});
+		setQuestionForm({
+			title: "",
+			question: "",
+			answerOption1: "",
+			answerOption2: "",
+			answerOption3: "",
+			answerOption4: "",
+			timeToComplete: "",
+			duration: "",
+		});
+	};
+	const handleTaskTypeChange = (e) => {
+		resetForm();
+		setTaskType(e.target.value);
+	};
 
 	return (
 		<>
@@ -64,11 +170,11 @@ const ContentManagementDayAddTask = () => {
 							<h2>New Task</h2>
 							<div className="flex-row column-gap-05">
 								{taskType && (
-									<Button onClick={() => setTaskType("")}>
-										Cancel
-									</Button>
+									<Button onClick={resetForm}>Cancel</Button>
 								)}
-								<Button type="filled">Save</Button>
+								<Button onClick={addTask} type="filled">
+									Add
+								</Button>
 							</div>
 						</div>
 						<div
@@ -79,7 +185,7 @@ const ContentManagementDayAddTask = () => {
 								select
 								label="Task Type"
 								value={taskType}
-								onChange={(e) => setTaskType(e.target.value)}
+								onChange={handleTaskTypeChange}
 							>
 								<MenuItem key={1} value={"reading"}>
 									Reading
@@ -113,6 +219,17 @@ const ContentManagementDayAddTask = () => {
 											setReadingForm({
 												...readingForm,
 												description: e.target.value,
+											})
+										}
+									/>
+									<TextField
+										label="Content"
+										multiline
+										value={readingForm.content}
+										onChange={(e) =>
+											setReadingForm({
+												...readingForm,
+												content: e.target.value,
 											})
 										}
 									/>
@@ -155,6 +272,17 @@ const ContentManagementDayAddTask = () => {
 										}
 									/>
 									<TextField
+										label="Content"
+										multiline
+										value={journalingForm.content}
+										onChange={(e) =>
+											setJournalingForm({
+												...journalingForm,
+												content: e.target.value,
+											})
+										}
+									/>
+									<TextField
 										label="Time Expected to Complete"
 										value={journalingForm.timeToComplete}
 										onChange={(e) =>
@@ -164,7 +292,10 @@ const ContentManagementDayAddTask = () => {
 											})
 										}
 									/>
-									<UploadButton text="Add an Image" />
+									<UploadButton
+										icon={<MdImage />}
+										text="Add an Image"
+									/>
 								</>
 							)}
 							{taskType === "media" && (
@@ -200,7 +331,10 @@ const ContentManagementDayAddTask = () => {
 										}
 									/>
 									<UploadButton />
-									<UploadButton text="Add an Image" />
+									<UploadButton
+										icon={<MdImage />}
+										text="Add an Image"
+									/>
 								</>
 							)}
 							{taskType === "questionnaire" && (
@@ -216,12 +350,12 @@ const ContentManagementDayAddTask = () => {
 										}
 									/>
 									<TextField
-										label="Description"
-										value={questionForm.description}
+										label="Question"
+										value={questionForm.question}
 										onChange={(e) =>
 											setQuestionForm({
 												...questionForm,
-												description: e.target.value,
+												question: e.target.value,
 											})
 										}
 									/>
