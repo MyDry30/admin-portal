@@ -71,7 +71,7 @@ const ContentManagementDay = () => {
 
 	const handleRowClick = (params) => {
 		const { row } = params;
-		navigate(`/days/tasks/${row._id}`);
+		navigate(`/days/${dayNumber}/tasks/${row._id}`);
 	};
 
 	const handleSaveText = async () => {

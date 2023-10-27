@@ -152,20 +152,20 @@ const App = () => {
 										index
 										element={<ContentManagementDay />}
 									/>
-									<Route
-										path="tasks/add"
-										element={
-											<ContentManagementDayAddTask />
-										}
-									/>
-								</Route>
-								<Route path="tasks">
-									<Route
-										path=":taskId"
-										element={
-											<ContentManagementChallengeDayTask />
-										}
-									/>
+									<Route path="tasks">
+										<Route
+											path="add"
+											element={
+												<ContentManagementDayAddTask />
+											}
+										/>
+										<Route
+											path=":taskId"
+											element={
+												<ContentManagementChallengeDayTask />
+											}
+										/>
+									</Route>
 								</Route>
 							</Route>
 							<Route path="coaches">

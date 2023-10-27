@@ -9,12 +9,14 @@ import { TextField } from "@mui/material";
 import UploadButton from "../features/ui/uploadButton/UploadButton";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
-import getTaskById from "../features/api/tasks/getTaskById";
+import getDayTask from "../features/api/days/tasks/getDayTask";
+import updateDayTask from "../features/api/days/tasks/updateDayTask";
+import deleteDayTask from "../features/api/days/tasks/deleteDayTask";
 
 const ContentManagementChallengeDayTask = () => {
 	const user = useSelector(getUser);
 	const navigate = useNavigate();
-	const { taskId } = useParams();
+	const { dayNumber, taskId } = useParams();
 	const [canEdit, setCanEdit] = useState(false);
 
 	const [task, setTask] = useState(null);
@@ -34,7 +36,7 @@ const ContentManagementChallengeDayTask = () => {
 
 	const fetchTask = async (accessToken) => {
 		try {
-			const response = await getTaskById(accessToken, taskId);
+			const response = await getDayTask(accessToken, dayNumber, taskId);
 
 			const taskData = response.data;
 			setTask(taskData);
@@ -78,13 +80,71 @@ const ContentManagementChallengeDayTask = () => {
 		}
 	}, [user]);
 
-	const handleSaveButton = async () => {
-		console.log("save form here");
-	};
-
 	const resetForm = () => {
 		setCanEdit(false);
 		fetchTask(user.accessToken);
+	};
+
+	const handleSaveButton = async () => {
+		let body = {};
+		if (taskType === "reading") {
+			body = {
+				type: taskType,
+				title,
+				description,
+				content,
+				completionTime: timeToComplete,
+			};
+		} else if (taskType === "journaling") {
+			body = {
+				type: taskType,
+				title,
+				description,
+				content,
+				completionTime: timeToComplete,
+			};
+		} else if (taskType === "media") {
+			body = {
+				type: taskType,
+				title,
+				description,
+				duration,
+			};
+		} else if (taskType === "questionnaire") {
+			body = {
+				type: taskType,
+				title,
+				description,
+				answers: [option1, option2, option3, option4],
+				completionTime: timeToComplete,
+				duration,
+			};
+		} else {
+			console.warn(`Unknown task type: ${taskType}`);
+			return;
+		}
+
+		try {
+			await updateDayTask(user.accessToken, dayNumber, taskId, body);
+		} catch (err) {
+			console.warn(err.message);
+		} finally {
+			resetForm();
+		}
+	};
+
+	const handleDelete = async () => {
+		try {
+			if (confirm("Are you sure you want to delete this item?")) {
+				await deleteDayTask(user.accessToken, dayNumber, taskId);
+				alert(
+					`Task has been deleted. Redirecting to day ${dayNumber}...`
+				);
+				navigate(-1);
+			}
+		} catch (err) {
+			console.warn(err.message);
+		}
 	};
 
 	if (!task) {
@@ -107,7 +167,7 @@ const ContentManagementChallengeDayTask = () => {
 							cursor: "pointer",
 						}}
 					/>
-					<h2>Content Management/Task</h2>
+					<h2>Content Management / Task</h2>
 				</div>
 			</ControlBar>
 			<Container>
@@ -255,15 +315,6 @@ const ContentManagementChallengeDayTask = () => {
 											}
 										/>
 										<TextField
-											label="Time Expected to Complete"
-											value={timeToComplete}
-											onChange={(e) =>
-												setTimeToComplete(
-													e.target.value
-												)
-											}
-										/>
-										<TextField
 											label="Answer Option 1"
 											value={option1}
 											onChange={(e) =>
@@ -292,6 +343,15 @@ const ContentManagementChallengeDayTask = () => {
 											}
 										/>
 										<TextField
+											label="Time Expected to Complete"
+											value={timeToComplete}
+											onChange={(e) =>
+												setTimeToComplete(
+													e.target.value
+												)
+											}
+										/>
+										<TextField
 											label="Duration"
 											value={duration}
 											onChange={(e) =>
@@ -309,9 +369,17 @@ const ContentManagementChallengeDayTask = () => {
 						<div className="flex-column row-gap-2">
 							<div className="flex-row justify-sb">
 								<h2>About</h2>
-								<Button onClick={() => setCanEdit(true)}>
-									Edit
-								</Button>
+								<div className="flex-row column-gap-05">
+									<Button onClick={() => setCanEdit(true)}>
+										Edit
+									</Button>
+									<Button
+										type="filled"
+										onClick={handleDelete}
+									>
+										Delete
+									</Button>
+								</div>
 							</div>
 							<>
 								{taskType === "reading" && (

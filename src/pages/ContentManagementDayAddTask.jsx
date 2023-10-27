@@ -49,66 +49,6 @@ const ContentManagementDayAddTask = () => {
 		duration: "",
 	});
 
-	const addTask = async () => {
-		let body = {};
-		try {
-			if (!user.accessToken) {
-				throw new Error("Unable to add task to day.");
-			}
-
-			if (taskType === "reading") {
-				body = {
-					type: "reading",
-					title: readingForm.title,
-					description: readingForm.description,
-					content: readingForm.content,
-					completionTime: readingForm.timeToComplete,
-				};
-			} else if (taskType === "journaling") {
-				body = {
-					type: "journaling",
-					title: journalingForm.title,
-					description: journalingForm.description,
-					content: journalingForm.content,
-					completionTime: journalingForm.timeToComplete,
-				};
-			} else if (taskType === "media") {
-				body = {
-					type: "media",
-					title: mediaForm.title,
-					description: mediaForm.description,
-					duration: mediaForm.duration,
-				};
-			} else if (taskType === "questionnaire") {
-				body = {
-					type: "questionnaire",
-					title: questionForm.title,
-					description: questionForm.question,
-					answers: [
-						answerOption1,
-						answerOption2,
-						answerOption3,
-						answerOption4,
-					],
-					completionTime: questionForm.timeToComplete,
-					duration: questionForm.duration,
-				};
-			} else {
-				console.error(`Unknown task type: ${taskType}`);
-				return;
-			}
-
-			console.log(body);
-			const response = await addTaskByDay(
-				user.accessToken,
-				dayNumber,
-				body
-			);
-			console.log(response.body);
-		} catch (err) {
-			console.warn(err.message);
-		}
-	};
 	const resetForm = () => {
 		setTaskType("");
 		setReadingForm({
@@ -143,6 +83,122 @@ const ContentManagementDayAddTask = () => {
 			duration: "",
 		});
 	};
+
+	const addTask = async () => {
+		let body = {};
+		try {
+			if (!user.accessToken) {
+				throw new Error("Unable to add task to day.");
+			}
+
+			if (taskType === "reading") {
+				if (!readingForm.title) {
+					return alert("Error: Title is required.");
+				}
+				if (!readingForm.description) {
+					return alert("Error: Description is required.");
+				}
+				if (!readingForm.content) {
+					return alert("Error: Content is required.");
+				}
+				if (!readingForm.timeToComplete) {
+					return alert("Error: Time to Complete is required.");
+				}
+				body = {
+					type: "reading",
+					title: readingForm.title,
+					description: readingForm.description,
+					content: readingForm.content,
+					completionTime: readingForm.timeToComplete,
+				};
+			} else if (taskType === "journaling") {
+				if (!readingForm.title) {
+					return alert("Error: Title is required.");
+				}
+				if (!readingForm.description) {
+					return alert("Error: Description is required.");
+				}
+				if (!readingForm.content) {
+					return alert("Error: Content is required.");
+				}
+				if (!readingForm.timeToComplete) {
+					return alert("Error: Time to Complete is required.");
+				}
+				body = {
+					type: "journaling",
+					title: journalingForm.title,
+					description: journalingForm.description,
+					content: journalingForm.content,
+					completionTime: journalingForm.timeToComplete,
+				};
+			} else if (taskType === "media") {
+				if (!readingForm.title) {
+					return alert("Error: Title is required.");
+				}
+				if (!readingForm.description) {
+					return alert("Error: Description is required.");
+				}
+				if (!readingForm.duration) {
+					return alert("Error: Duration is required.");
+				}
+				body = {
+					type: "media",
+					title: mediaForm.title,
+					description: mediaForm.description,
+					duration: mediaForm.duration,
+				};
+			} else if (taskType === "questionnaire") {
+				if (!readingForm.title) {
+					return alert("Error: Title is required.");
+				}
+				if (!readingForm.description) {
+					return alert("Error: Description is required.");
+				}
+				if (!readingForm.answerOption1) {
+					return alert("Error: Answer Option 1 is required.");
+				}
+				if (!readingForm.answerOption2) {
+					return alert("Error: Answer Option 2 is required.");
+				}
+				if (!readingForm.answerOption3) {
+					return alert("Error: Answer Option 3 is required.");
+				}
+				if (!readingForm.answerOption4) {
+					return alert("Error: Answer Option 4 is required.");
+				}
+				if (!readingForm.timeToComplete) {
+					return alert("Error: Time to Complete is required.");
+				}
+				if (!readingForm.duration) {
+					return alert("Error: Duration is required.");
+				}
+				body = {
+					type: "questionnaire",
+					title: questionForm.title,
+					description: questionForm.question,
+					answers: [
+						answerOption1,
+						answerOption2,
+						answerOption3,
+						answerOption4,
+					],
+					completionTime: questionForm.timeToComplete,
+					duration: questionForm.duration,
+				};
+			} else {
+				console.error(`Unknown task type: ${taskType}`);
+				return;
+			}
+
+			await addTaskByDay(user.accessToken, dayNumber, body);
+			alert("Task has been added.");
+			resetForm();
+		} catch (err) {
+			console.warn(err.message);
+			resetForm();
+		}
+	};
+
 	const handleTaskTypeChange = (e) => {
 		resetForm();
 		setTaskType(e.target.value);
