@@ -112,16 +112,16 @@ const ContentManagementDayAddTask = () => {
 					completionTime: readingForm.timeToComplete,
 				};
 			} else if (taskType === "journaling") {
-				if (!readingForm.title) {
+				if (!journalingForm.title) {
 					return alert("Error: Title is required.");
 				}
-				if (!readingForm.description) {
+				if (!journalingForm.description) {
 					return alert("Error: Description is required.");
 				}
-				if (!readingForm.content) {
+				if (!journalingForm.content) {
 					return alert("Error: Content is required.");
 				}
-				if (!readingForm.timeToComplete) {
+				if (!journalingForm.timeToComplete) {
 					return alert("Error: Time to Complete is required.");
 				}
 				body = {
@@ -132,13 +132,13 @@ const ContentManagementDayAddTask = () => {
 					completionTime: journalingForm.timeToComplete,
 				};
 			} else if (taskType === "media") {
-				if (!readingForm.title) {
+				if (!mediaForm.title) {
 					return alert("Error: Title is required.");
 				}
-				if (!readingForm.description) {
+				if (!mediaForm.description) {
 					return alert("Error: Description is required.");
 				}
-				if (!readingForm.duration) {
+				if (!mediaForm.duration) {
 					return alert("Error: Duration is required.");
 				}
 				body = {
@@ -148,28 +148,28 @@ const ContentManagementDayAddTask = () => {
 					duration: mediaForm.duration,
 				};
 			} else if (taskType === "questionnaire") {
-				if (!readingForm.title) {
+				if (!questionForm.title) {
 					return alert("Error: Title is required.");
 				}
-				if (!readingForm.description) {
+				if (!questionForm.question) {
 					return alert("Error: Description is required.");
 				}
-				if (!readingForm.answerOption1) {
+				if (!questionForm.answerOption1) {
 					return alert("Error: Answer Option 1 is required.");
 				}
-				if (!readingForm.answerOption2) {
+				if (!questionForm.answerOption2) {
 					return alert("Error: Answer Option 2 is required.");
 				}
-				if (!readingForm.answerOption3) {
+				if (!questionForm.answerOption3) {
 					return alert("Error: Answer Option 3 is required.");
 				}
-				if (!readingForm.answerOption4) {
+				if (!questionForm.answerOption4) {
 					return alert("Error: Answer Option 4 is required.");
 				}
-				if (!readingForm.timeToComplete) {
+				if (!questionForm.timeToComplete) {
 					return alert("Error: Time to Complete is required.");
 				}
-				if (!readingForm.duration) {
+				if (!questionForm.duration) {
 					return alert("Error: Duration is required.");
 				}
 				body = {
@@ -177,10 +177,10 @@ const ContentManagementDayAddTask = () => {
 					title: questionForm.title,
 					description: questionForm.question,
 					answers: [
-						answerOption1,
-						answerOption2,
-						answerOption3,
-						answerOption4,
+						questionForm.answerOption1,
+						questionForm.answerOption2,
+						questionForm.answerOption3,
+						questionForm.answerOption4,
 					],
 					completionTime: questionForm.timeToComplete,
 					duration: questionForm.duration,
