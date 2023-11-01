@@ -26,7 +26,7 @@ import AppUser from "./pages/AppUser";
 import ContentManagementChallenge from "./pages/ContentManagementChallenge";
 import ContentManagementCoaches from "./pages/ContentManagementCoaches";
 import ContentMangementToolkit from "./pages/ContentMangementToolkit";
-import ContentManagementForums from "./pages/ContentManagementForums";
+// import ContentManagementForums from "./pages/ContentManagementForums";
 import ContentManagementMedia from "./pages/ContentManagementMedia";
 import AdminUsersActive from "./pages/AdminUsersActive";
 import AdminUsersDisabled from "./pages/AdminUsersDisabled";
@@ -41,6 +41,8 @@ import ContentManagementForum from "./pages/ContentManagementForum";
 import ContentManagementAddMedia from "./pages/ContentManagementAddMedia";
 import ContentManagementMediaSingle from "./pages/ContentManagementMediaSingle";
 import ContentManagementChallengeDayTask from "./pages/ContentManagementChallengeDayTask";
+import ContentManagementPostChallenge from "./pages/ContentManagementPostChallenge";
+import ContentManagementAddDay from "./pages/ContentManagementAddDay";
 
 const customTheme = (outerTheme) =>
 	createTheme({
@@ -125,6 +127,10 @@ const App = () => {
 									element={<ContentManagementChallenge />}
 								/>
 								<Route
+									path="post-challenge"
+									element={<ContentManagementPostChallenge />}
+								/>
+								<Route
 									path="coaches"
 									element={<ContentManagementCoaches />}
 								/>
@@ -147,6 +153,10 @@ const App = () => {
 								</Route>
 							</Route>
 							<Route path="days">
+								<Route
+									path="add"
+									element={<ContentManagementAddDay />}
+								/>
 								<Route path=":dayNumber">
 									<Route
 										index

@@ -74,6 +74,9 @@ const ContentManagementForums = () => {
 				<NavLink to="/content-management/30-day-challenge">
 					30 Day Challenge
 				</NavLink>
+				<NavLink to="/content-management/post-challenge">
+					Post Challenge
+				</NavLink>
 				<NavLink to="/content-management/coaches">Coaches</NavLink>
 				<NavLink to="/content-management/toolkit">Toolkit</NavLink>
 			</SubNav>
