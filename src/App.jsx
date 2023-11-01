@@ -134,12 +134,12 @@ const App = () => {
 								>
 									<Route
 										index
-										element={<Navigate to="forums" />}
+										element={<Navigate to="media" />}
 									/>
-									<Route
+									{/* <Route
 										path="forums"
 										element={<ContentManagementForums />}
-									/>
+									/> */}
 									<Route
 										path="media"
 										element={<ContentManagementMedia />}

@@ -74,9 +74,9 @@ const ContentManagementMedia = () => {
 				<NavLink to="/content-management/toolkit">Toolkit</NavLink>
 			</SubNav>
 			<SubNav>
-				<NavLink to="/content-management/toolkit/forums">
+				{/* <NavLink to="/content-management/toolkit/forums">
 					Forums
-				</NavLink>
+				</NavLink> */}
 				<NavLink to="/content-management/toolkit/media">
 					Media Files
 				</NavLink>
