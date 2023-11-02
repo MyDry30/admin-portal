@@ -11,6 +11,7 @@ import UploadButton from "../features/ui/uploadButton/UploadButton";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
 import getCoachById from "../features/api/coaches/getCoachById";
+import upload from "../features/api/media/upload";
 
 const ContentManagementCoach = () => {
 	const user = useSelector(getUser);
@@ -24,6 +25,7 @@ const ContentManagementCoach = () => {
 	const [description, setDescription] = useState("");
 	const [link, setLink] = useState("");
 	const [status, setStatus] = useState("");
+	const [imageFile, setImageFile] = useState(null);
 
 	const fetchCoach = async (accessToken) => {
 		try {
@@ -46,6 +48,20 @@ const ContentManagementCoach = () => {
 		}
 	}, [user]);
 
+	// const handleUpload = async () => {
+	// 	try {
+	// 		if (imageFile) {
+	// 			const formData = new FormData();
+	// 			formData.append("file", imageFile);
+
+	// 			const response = await upload(user.accessToken, formData);
+	// 			console.log(response.data);
+	// 		}
+	// 	} catch(err){
+	// 		console.log(err.message);
+	// 	}
+	// };
+
 	const handleSaveButton = async () => {
 		if (!firstName) {
 			return alert("First Name is required.");
@@ -62,7 +78,7 @@ const ContentManagementCoach = () => {
 		if (!status) {
 			return alert("Status is required.");
 		}
-		console.log("save form here");
+		// await handleUpload();
 	};
 
 	return (
@@ -141,7 +157,10 @@ const ContentManagementCoach = () => {
 										Disabled
 									</MenuItem>
 								</TextField>
-								<UploadButton text="Add an Image" />
+								<UploadButton
+									setSelectedFile={setImageFile}
+									text="Add an Image"
+								/>
 							</div>
 						</div>
 					</Modal>
