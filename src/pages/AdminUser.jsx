@@ -9,6 +9,7 @@ import { MenuItem, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 import getUserById from "../features/api/getUserById";
 import { getUser } from "../features/app/authSlice";
+import updateUserById from "../features/api/users/updateUserById";
 
 const AdminUser = () => {
 	const user = useSelector(getUser);
@@ -17,6 +18,7 @@ const AdminUser = () => {
 	const { userId } = useParams();
 	const [canEdit, setCanEdit] = useState(false);
 
+	const [adminUser, setAdminUser] = useState(null);
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
@@ -27,6 +29,8 @@ const AdminUser = () => {
 		try {
 			const response = await getUserById(accessToken, userId);
 			const userData = response.data;
+
+			setAdminUser(userData);
 
 			setFirstName(userData.firstName);
 			setLastName(userData.lastName);
@@ -44,6 +48,11 @@ const AdminUser = () => {
 		}
 	}, [user]);
 
+	const handleCancelButton = async () => {
+		await fetchUser(user.accessToken);
+		setCanEdit(false);
+	};
+
 	const handleSaveButton = async () => {
 		if (!firstName) {
 			return alert("First Name is required.");
@@ -54,14 +63,32 @@ const AdminUser = () => {
 		if (!email) {
 			return alert("Email is required.");
 		}
-		if (!journey) {
+		if (!phoneNumber) {
 			return alert("Journey is required.");
 		}
 		if (!status) {
 			return alert("Status is required.");
 		}
-		console.log("save form here");
+		try {
+			await updateUserById(user.accessToken, adminUser._id, {
+				firstName,
+				lastName,
+				email,
+				phoneNumber,
+				status,
+			});
+			alert("User has been updated.");
+		} catch (err) {
+			console.log(err.message);
+		} finally {
+			setCanEdit(false);
+			await fetchUser(user.accessToken);
+		}
 	};
+
+	if (!adminUser) {
+		return <h2>Loading...</h2>;
+	}
 
 	return (
 		<>
@@ -88,7 +115,7 @@ const AdminUser = () => {
 									<Button onClick={handleSaveButton}>
 										Save
 									</Button>
-									<Button onClick={() => setCanEdit(false)}>
+									<Button onClick={handleCancelButton}>
 										Cancel
 									</Button>
 								</div>

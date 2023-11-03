@@ -13,7 +13,7 @@ import { getUser } from "../features/app/authSlice";
 const columns = [
 	{ field: "firstName", headerName: "First Name", width: 130 },
 	{ field: "lastName", headerName: "Last Name", width: 130 },
-	{ field: "description", headerName: "Descripton", width: 300 },
+	{ field: "description", headerName: "Description", width: 300 },
 	{ field: "bookingsLink", headerName: "Link", width: 150 },
 	{ field: "status", headerName: "Status", width: 90 },
 ];

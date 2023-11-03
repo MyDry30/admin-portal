@@ -1,24 +1,25 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ControlBar from "../features/ui/controlBar/ControlBar";
 import { MdArrowBack } from "react-icons/md";
 import Container from "../features/ui/container/Container";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
 import { MenuItem, TextField } from "@mui/material";
+import addUser from "../features/api/users/addUser";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
+import { v4 as uuid } from "uuid";
 
 const NewAdminUser = () => {
 	const navigate = useNavigate();
-	const { userId } = useParams();
-	const [canEdit, setCanEdit] = useState(false);
+	const user = useSelector(getUser);
 
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
-	const [journey, setJourney] = useState("dry");
+	const [phoneNumber, setPhoneNumber] = useState("");
 	const [status, setStatus] = useState("active");
-
-	const handleBackClick = () => navigate(-1);
 
 	const handleAddClick = async () => {
 		if (!firstName) {
@@ -30,13 +31,27 @@ const NewAdminUser = () => {
 		if (!email) {
 			return alert("Email is required.");
 		}
-		if (!journey) {
-			return alert("Journey is required.");
+		if (!phoneNumber) {
+			return alert("Phone Number is required.");
 		}
 		if (!status) {
 			return alert("Status is required.");
 		}
-		console.log("handle add here");
+		try {
+			await addUser(user.accessToken, {
+				firstName,
+				lastName,
+				email,
+				phoneNumber,
+				status,
+				password: uuid(),
+				role: "admin",
+			});
+			alert("New user has been created.");
+			navigate("/admin-users/active");
+		} catch (err) {
+			console.log(err.message);
+		}
 	};
 
 	return (
@@ -44,7 +59,7 @@ const NewAdminUser = () => {
 			<ControlBar>
 				<div className="flex-row align-center column-gap-1">
 					<MdArrowBack
-						onClick={handleBackClick}
+						onClick={() => navigate(-1)}
 						style={{
 							width: "32px",
 							height: "32px",
@@ -84,18 +99,10 @@ const NewAdminUser = () => {
 							onChange={(e) => setEmail(e.target.value)}
 						/>
 						<TextField
-							select
-							label="Journey"
-							value={journey}
-							onChange={(e) => setJourney(e.target.value)}
-						>
-							<MenuItem key={1} value={"dry"}>
-								Dry
-							</MenuItem>
-							<MenuItem key={2} value={"moderation"}>
-								Moderation
-							</MenuItem>
-						</TextField>
+							label="Phone Number"
+							value={phoneNumber}
+							onChange={(e) => setPhoneNumber(e.target.value)}
+						/>
 						<TextField
 							select
 							label="Status"

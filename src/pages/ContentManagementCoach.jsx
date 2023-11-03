@@ -11,7 +11,7 @@ import UploadButton from "../features/ui/uploadButton/UploadButton";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
 import getCoachById from "../features/api/coaches/getCoachById";
-import upload from "../features/api/media/upload";
+import updateCoachById from "../features/api/coaches/updateCoachById";
 
 const ContentManagementCoach = () => {
 	const user = useSelector(getUser);
@@ -48,19 +48,15 @@ const ContentManagementCoach = () => {
 		}
 	}, [user]);
 
-	// const handleUpload = async () => {
-	// 	try {
-	// 		if (imageFile) {
-	// 			const formData = new FormData();
-	// 			formData.append("file", imageFile);
-
-	// 			const response = await upload(user.accessToken, formData);
-	// 			console.log(response.data);
-	// 		}
-	// 	} catch(err){
-	// 		console.log(err.message);
-	// 	}
-	// };
+	const handleCancel = async () => {
+		try {
+			await fetchCoach(user.accessToken);
+		} catch (err) {
+			console.log(err.message);
+		} finally {
+			setCanEdit(false);
+		}
+	};
 
 	const handleSaveButton = async () => {
 		if (!firstName) {
@@ -78,7 +74,21 @@ const ContentManagementCoach = () => {
 		if (!status) {
 			return alert("Status is required.");
 		}
-		// await handleUpload();
+		try {
+			await updateCoachById(user.accessToken, coachId, {
+				firstName,
+				lastName,
+				description,
+				bookingsLink: link,
+				status,
+			});
+			alert("Coach information has been updated.");
+			await fetchCoach(user.accessToken);
+		} catch (err) {
+			console.log(err.message);
+		} finally {
+			setCanEdit(false);
+		}
 	};
 
 	return (
@@ -109,7 +119,7 @@ const ContentManagementCoach = () => {
 									>
 										Save
 									</Button>
-									<Button onClick={() => setCanEdit(false)}>
+									<Button onClick={handleCancel}>
 										Cancel
 									</Button>
 								</div>

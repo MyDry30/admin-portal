@@ -10,6 +10,7 @@ import { MenuItem, TextField } from "@mui/material";
 import getUserById from "../features/api/getUserById";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
+import updateUserById from "../features/api/users/updateUserById";
 
 const AppUser = () => {
 	const user = useSelector(getUser);
@@ -18,6 +19,7 @@ const AppUser = () => {
 	const { userId } = useParams();
 	const [canEdit, setCanEdit] = useState(false);
 
+	const [appUser, setAppUser] = useState(null);
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
@@ -28,6 +30,8 @@ const AppUser = () => {
 		try {
 			const response = await getUserById(accessToken, userId);
 			const userData = response.data;
+
+			setAppUser(userData);
 
 			setFirstName(userData.firstName);
 			setLastName(userData.lastName);
@@ -45,6 +49,11 @@ const AppUser = () => {
 		}
 	}, [user]);
 
+	const handleCancelButton = async () => {
+		await fetchUser(user.accessToken);
+		setCanEdit(false);
+	};
+
 	const handleSaveButton = async () => {
 		if (!firstName) {
 			return alert("First Name is required.");
@@ -61,8 +70,25 @@ const AppUser = () => {
 		if (!status) {
 			return alert("Status is required.");
 		}
-		console.log("save form here");
+		try {
+			await updateUserById(user.accessToken, appUser._id, {
+				firstName,
+				lastName,
+				email,
+				journey,
+				status,
+			});
+			alert("User has been updated.");
+		} catch (err) {
+			console.log(err.message);
+		} finally {
+			setCanEdit(false);
+		}
 	};
+
+	if (!appUser) {
+		return <h2>Loading...</h2>;
+	}
 
 	return (
 		<>
@@ -89,7 +115,7 @@ const AppUser = () => {
 									<Button onClick={handleSaveButton}>
 										Save
 									</Button>
-									<Button onClick={() => setCanEdit(false)}>
+									<Button onClick={handleCancelButton}>
 										Cancel
 									</Button>
 								</div>

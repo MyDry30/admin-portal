@@ -1,18 +1,20 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import getMedia from "../features/api/getMedia";
+import getMedia from "../features/api/media/getMedia";
 import SearchInput from "../features/ui/searchInput/SearchInput";
 import { MdSearch } from "react-icons/md";
 import Button from "../features/ui/button/Button";
 import SubNav from "../features/ui/subNav/SubNav";
 import { NavLink, useNavigate } from "react-router-dom";
 import useSearch from "../features/search/useSearch";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
 
 const columns = [
 	{ field: "title", headerName: "Title", width: 200 },
 	{ field: "type", headerName: "Type", width: 200 },
 	{ field: "description", headerName: "Description", width: 300 },
-	{ field: "status", headerName: "Status", width: 200 },
+	{ field: "duration", headerName: "Duration", width: 200 },
 ];
 const initialState = {
 	pagination: {
@@ -21,6 +23,7 @@ const initialState = {
 };
 
 const ContentManagementMedia = () => {
+	const user = useSelector(getUser);
 	const navigate = useNavigate();
 	const [media, setMedia] = useState([]);
 	const { searchRef, searchResults, handleSearchInput, setSearchResults } =
@@ -28,7 +31,7 @@ const ContentManagementMedia = () => {
 
 	const handleGetMedia = async () => {
 		try {
-			const response = await getMedia();
+			const response = await getMedia(user.accessToken);
 			setMedia(response.data);
 			setSearchResults(response.data);
 		} catch (err) {
@@ -37,12 +40,14 @@ const ContentManagementMedia = () => {
 	};
 
 	useEffect(() => {
-		handleGetMedia();
-	}, []);
+		if (user.accessToken) {
+			handleGetMedia();
+		}
+	}, [user]);
 
 	const handleRowClick = (params) => {
 		const { row } = params;
-		navigate("/media/12345");
+		navigate(`/media/${row._id}`);
 	};
 
 	return (
@@ -91,6 +96,7 @@ const ContentManagementMedia = () => {
 				pageSizeOptions={[10, 25, 50]}
 				onRowClick={handleRowClick}
 				className="custom-data-grid"
+				getRowId={(row) => row["_id"]}
 			/>
 		</>
 	);

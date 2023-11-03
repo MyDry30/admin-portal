@@ -188,7 +188,7 @@ const App = () => {
 									element={<ContentManagementCoach />}
 								/>
 							</Route>
-							<Route path="forums">
+							{/* <Route path="forums">
 								<Route
 									path="add"
 									element={<ContentManagementAddForum />}
@@ -197,7 +197,7 @@ const App = () => {
 									path=":forumId"
 									element={<ContentManagementForum />}
 								/>
-							</Route>
+							</Route> */}
 							<Route path="media">
 								<Route
 									path="add"

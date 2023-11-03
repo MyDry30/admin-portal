@@ -7,8 +7,12 @@ import Button from "../features/ui/button/Button";
 import { useState } from "react";
 import { MenuItem, TextField } from "@mui/material";
 import UploadButton from "../features/ui/uploadButton/UploadButton";
+import addMedia from "../features/api/media/addMedia";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
 
 const ContentManagementAddMedia = () => {
+	const user = useSelector(getUser);
 	const navigate = useNavigate();
 
 	const [type, setType] = useState("");
@@ -22,7 +26,18 @@ const ContentManagementAddMedia = () => {
 		if (!description) return alert("Description is required.");
 		if (!duration) return alert("Duration is required.");
 
-		console.log("save form here");
+		try {
+			await addMedia(user.accessToken, {
+				title,
+				duration,
+				type,
+				description,
+			});
+			alert("Media successfully added.");
+			navigate("/content-management/toolkit/media");
+		} catch (err) {
+			console.log(err.message);
+		}
 	};
 
 	return (

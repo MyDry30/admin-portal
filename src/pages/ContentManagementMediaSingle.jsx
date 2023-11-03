@@ -1,21 +1,58 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ControlBar from "../features/ui/controlBar/ControlBar";
 import { MdArrowBack, MdImage } from "react-icons/md";
 import Container from "../features/ui/container/Container";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
 import { MenuItem, TextField } from "@mui/material";
 import UploadButton from "../features/ui/uploadButton/UploadButton";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
+import getMediaById from "../features/api/media/getMediaById";
+import updatedMediaById from "../features/api/media/updateMediaById";
 
 const ContentManagementMediaSingle = () => {
+	const user = useSelector(getUser);
 	const navigate = useNavigate();
+	const { mediaId } = useParams();
 	const [canEdit, setCanEdit] = useState(false);
 
+	const [media, setMedia] = useState(null);
 	const [type, setType] = useState("video");
 	const [title, setTitle] = useState("[Text]");
 	const [description, setDescription] = useState("[Text]");
 	const [duration, setDuration] = useState("10");
+
+	const fetchMedia = async () => {
+		try {
+			const response = await getMediaById(user.accessToken, mediaId);
+
+			setMedia(response.data);
+			setType(response.data.type);
+			setTitle(response.data.title);
+			setDescription(response.data.description);
+			setDuration(response.data.duration);
+		} catch (err) {
+			console.log(err.message);
+		}
+	};
+
+	useEffect(() => {
+		if (user.accessToken) {
+			fetchMedia();
+		}
+	}, [user]);
+
+	const handleCancelButton = async () => {
+		try {
+			await fetchMedia();
+		} catch (err) {
+			console.log(err.message);
+		} finally {
+			setCanEdit(false);
+		}
+	};
 
 	const handleSaveButton = async () => {
 		if (!type) return alert("Type is required.");
@@ -23,8 +60,25 @@ const ContentManagementMediaSingle = () => {
 		if (!description) return alert("Description is required.");
 		if (!duration) return alert("Duration is required.");
 
-		console.log("save form here");
+		try {
+			await updatedMediaById(user.accessToken, mediaId, {
+				type,
+				title,
+				description,
+				duration,
+			});
+			alert("Media information has been updated.");
+			await fetchMedia();
+		} catch (err) {
+			console.log(err.message);
+		} finally {
+			setCanEdit(false);
+		}
 	};
+
+	if (!media) {
+		return <h2>Loading...</h2>;
+	}
 
 	return (
 		<>
@@ -54,7 +108,7 @@ const ContentManagementMediaSingle = () => {
 									>
 										Save
 									</Button>
-									<Button onClick={() => setCanEdit(false)}>
+									<Button onClick={handleCancelButton}>
 										Cancel
 									</Button>
 								</div>

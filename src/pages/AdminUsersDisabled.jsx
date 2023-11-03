@@ -50,7 +50,7 @@ const AdminUsersDisabled = () => {
 
 	const handleRowClick = (params) => {
 		const { row } = params;
-		navigate(`/users/${row._id}`);
+		navigate(`/users/admin/${row._id}`);
 	};
 
 	return (
