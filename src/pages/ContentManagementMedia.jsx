@@ -9,6 +9,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import useSearch from "../features/search/useSearch";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
+import capitalizeFirstLetter from "../features/utils/capitalizeFirstLetter";
 
 const columns = [
 	{ field: "title", headerName: "Title", width: 200 },
@@ -90,7 +91,10 @@ const ContentManagementMedia = () => {
 				</NavLink>
 			</SubNav>
 			<DataGrid
-				rows={searchResults}
+				rows={searchResults.map((result) => ({
+					...result,
+					type: capitalizeFirstLetter(result.type),
+				}))}
 				columns={columns}
 				initialState={initialState}
 				pageSizeOptions={[10, 25, 50]}

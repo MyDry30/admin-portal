@@ -8,13 +8,14 @@ import useSearch from "../features/search/useSearch";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
 import getAllUsers from "../features/api/users/getAllUsers";
+import prettifyDate from "../features/utils/prettifyDate";
 
 const columns = [
 	{ field: "firstName", headerName: "First Name", width: 130 },
 	{ field: "lastName", headerName: "Last Name", width: 130 },
 	{ field: "email", headerName: "Email", width: 200 },
-	{ field: "journey", headerName: "Journey", width: 130 },
-	{ field: "lastActive", headerName: "Last Active", width: 200 },
+	{ field: "phoneNumber", headerName: "Phone", width: 130 },
+	{ field: "updatedAt", headerName: "Last Active", width: 200 },
 ];
 const initialState = {
 	pagination: {
@@ -70,7 +71,10 @@ const AdminUsersActive = () => {
 			</SubNav>
 			{users ? (
 				<DataGrid
-					rows={searchResults}
+					rows={searchResults.map((result) => ({
+						...result,
+						updatedAt: prettifyDate(result.updatedAt),
+					}))}
 					columns={columns}
 					initialState={initialState}
 					pageSizeOptions={[10, 25, 50]}

@@ -23,6 +23,7 @@ const AdminUsers = () => {
 				role: user.role,
 				email: user.email,
 				phoneNumber: user.phoneNumber,
+				lastActive: user.updatedAt,
 				createdAt: user.createdAt,
 			}));
 			downloadSpreadsheet(data, "admin-users");

@@ -8,13 +8,15 @@ import SubNav from "../features/ui/subNav/SubNav";
 import getAllUsers from "../features/api/users/getAllUsers";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
+import prettifyDate from "../features/utils/prettifyDate";
+import capitalizeFirstLetter from "../features/utils/capitalizeFirstLetter";
 
 const columns = [
 	{ field: "firstName", headerName: "First Name", width: 130 },
 	{ field: "lastName", headerName: "Last Name", width: 130 },
 	{ field: "email", headerName: "Email", width: 200 },
 	{ field: "journey", headerName: "Journey", width: 130 },
-	{ field: "lastActive", headerName: "Last Active", width: 200 },
+	{ field: "updatedAt", headerName: "Last Active", width: 200 },
 	{ field: "createdAt", headerName: "Created At", width: 200 },
 ];
 const initialState = {
@@ -73,7 +75,12 @@ const UserManagementActive = () => {
 			</SubNav>
 			{users ? (
 				<DataGrid
-					rows={searchResults}
+					rows={searchResults.map((result) => ({
+						...result,
+						journey: capitalizeFirstLetter(result.journey),
+						updatedAt: prettifyDate(result.updatedAt),
+						createdAt: prettifyDate(result.createdAt),
+					}))}
 					columns={columns}
 					initialState={initialState}
 					onRowClick={handleRowClick}
