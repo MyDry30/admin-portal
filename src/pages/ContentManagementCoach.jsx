@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
 import getCoachById from "../features/api/coaches/getCoachById";
 import updateCoachById from "../features/api/coaches/updateCoachById";
+import uploadAsset from "../features/api/s3/uploadAsset";
 
 const ContentManagementCoach = () => {
 	const user = useSelector(getUser);
@@ -20,6 +21,7 @@ const ContentManagementCoach = () => {
 	const navigate = useNavigate();
 	const [canEdit, setCanEdit] = useState(false);
 
+	const [coach, setCoach] = useState(null);
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [description, setDescription] = useState("");
@@ -32,11 +34,14 @@ const ContentManagementCoach = () => {
 			const response = await getCoachById(accessToken, coachId);
 			const coach = response.data;
 
+			setCoach(coach);
+
 			setFirstName(coach.firstName);
 			setLastName(coach.lastName);
 			setDescription(coach.description);
 			setLink(coach.bookingsLink);
 			setStatus(coach.status);
+			setImageFile(coach.image);
 		} catch (err) {
 			console.log(err.message);
 		}
@@ -74,6 +79,15 @@ const ContentManagementCoach = () => {
 		if (!status) {
 			return alert("Status is required.");
 		}
+
+		let image = "";
+		console.log(imageFile);
+		if (imageFile) {
+			console.log("image file");
+			const { data } = await uploadAsset(user.accessToken, imageFile);
+			console.log(data);
+		}
+
 		try {
 			await updateCoachById(user.accessToken, coachId, {
 				firstName,
@@ -81,6 +95,7 @@ const ContentManagementCoach = () => {
 				description,
 				bookingsLink: link,
 				status,
+				image,
 			});
 			alert("Coach information has been updated.");
 			await fetchCoach(user.accessToken);
@@ -90,6 +105,10 @@ const ContentManagementCoach = () => {
 			setCanEdit(false);
 		}
 	};
+
+	if (!coach) {
+		return <h2>Loading...</h2>;
+	}
 
 	return (
 		<>
@@ -183,7 +202,7 @@ const ContentManagementCoach = () => {
 									Edit
 								</Button>
 							</div>
-							<ProfileImage />
+							<ProfileImage src={imageFile} />
 							<div className="flex-column row-gap-05">
 								<p className="small-text">First Name</p>
 								<p>{firstName}</p>

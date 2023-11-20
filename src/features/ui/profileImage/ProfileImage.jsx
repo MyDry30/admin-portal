@@ -1,10 +1,10 @@
 import { StyledProfileImage } from "./ProfileImage.styled";
-import headshot from "../../../assets/headshot.jpg";
+import { MdAccountCircle } from "react-icons/md";
 
-const ProfileImage = ({ src, alt }) => {
+const ProfileImage = ({ src, alt = "" }) => {
 	return (
 		<StyledProfileImage>
-			<img src={headshot} alt={alt || ""} />
+			{src ? <img src={src} alt={alt} /> : <MdAccountCircle />}
 		</StyledProfileImage>
 	);
 };
