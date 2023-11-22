@@ -12,6 +12,17 @@ export const axiosAuth = (token) => {
 	});
 };
 
+export const axiosFormData = (token) => {
+	return axios.create({
+		baseURL: URL,
+		headers: {
+			"Content-Type": "multipart/form-data",
+			Authorization: `Bearer ${token}`,
+		},
+		withCredentials: true,
+	});
+};
+
 export default axios.create({
 	baseURL: URL,
 	headers: { "Content-Type": "application/json" },

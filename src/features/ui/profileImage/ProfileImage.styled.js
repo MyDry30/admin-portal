@@ -4,9 +4,9 @@ export const StyledProfileImage = styled.div`
 	width: 160px;
 	height: 160px;
 	border-radius: 80px;
-	background-color: whitesmoke;
 
-	img {
+	img,
+	svg {
 		width: 100%;
 		height: 100%;
 		border-radius: 80px;
