@@ -10,11 +10,24 @@ import UploadButton from "../features/ui/uploadButton/UploadButton";
 import addTaskByDay from "../features/api/days/addTaskByDay";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
+import uploadAsset from "../features/api/s3/uploadAsset";
 
 const ContentManagementDayAddTask = () => {
 	const user = useSelector(getUser);
 	const navigate = useNavigate();
 	const { dayNumber } = useParams();
+
+	const [imageFile, setImageFile] = useState(null);
+	const [mediaFile, setMediaFile] = useState(null);
+
+	const handleUpload = async (file) => {
+		try {
+			const response = await uploadAsset(user.accessToken, file);
+			return response;
+		} catch (error) {
+			console.error("Error uploading file:", error);
+		}
+	};
 
 	const [taskType, setTaskType] = useState("");
 	const [readingForm, setReadingForm] = useState({
@@ -190,6 +203,15 @@ const ContentManagementDayAddTask = () => {
 				return;
 			}
 
+			if (imageFile) {
+				const response = await handleUpload(imageFile);
+				body.image = response.data;
+			}
+			if (mediaFile) {
+				const response = await handleUpload(mediaFile);
+				body.file = response.data;
+			}
+
 			await addTaskByDay(user.accessToken, dayNumber, body);
 			alert("Task has been added.");
 			resetForm();
@@ -302,6 +324,7 @@ const ContentManagementDayAddTask = () => {
 									<UploadButton
 										text="Add an Image"
 										icon={<MdImage />}
+										setSelectedFile={setImageFile}
 									/>
 								</>
 							)}
@@ -351,6 +374,7 @@ const ContentManagementDayAddTask = () => {
 									<UploadButton
 										icon={<MdImage />}
 										text="Add an Image"
+										setSelectedFile={setImageFile}
 									/>
 								</>
 							)}
@@ -386,10 +410,13 @@ const ContentManagementDayAddTask = () => {
 											})
 										}
 									/>
-									<UploadButton />
+									<UploadButton
+										setSelectedFile={setMediaFile}
+									/>
 									<UploadButton
 										icon={<MdImage />}
 										text="Add an Image"
+										setSelectedFile={setImageFile}
 									/>
 								</>
 							)}
