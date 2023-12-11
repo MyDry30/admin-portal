@@ -8,6 +8,7 @@ const updateDayTask = async (accessToken, dayNumber, taskId, data) => {
 		);
 		return response;
 	} catch (err) {
+		console.log(err);
 		throw new Error(err.message);
 	}
 };

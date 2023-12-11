@@ -12,10 +12,12 @@ import { getUser } from "../features/app/authSlice";
 import getDayByNumber from "../features/api/days/getDayByNumber";
 import editDay from "../features/api/days/editDay";
 import { INITIAL_STATE } from "../constants";
+import getDayTasks from "../features/api/days/tasks/getDayTasks";
 
 const columns = [
 	{ field: "title", headerName: "Title", width: 250 },
-	{ field: "description", headerName: "Description", width: 500 },
+	{ field: "description", headerName: "Description", width: 750 },
+	{ field: "language", headerName: "Language", width: 250 },
 ];
 
 const ContentManagementDay = () => {
@@ -52,7 +54,8 @@ const ContentManagementDay = () => {
 			setQuoteContent(quote.content);
 			setQuoteAuthor(quote.author);
 
-			const { tasks } = dayData;
+			const taskResponse = await getDayTasks(accessToken, dayNumber);
+			const tasks = taskResponse.data;
 			setTasks(tasks);
 			setFilteredTasks(tasks.filter((task) => task.type === taskType));
 		} catch (err) {

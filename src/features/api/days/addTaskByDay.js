@@ -8,6 +8,7 @@ const addTaskByDay = async (accessToken, day, data) => {
 		);
 		return response;
 	} catch (err) {
+		console.log(err);
 		throw new Error(err.message);
 	}
 };

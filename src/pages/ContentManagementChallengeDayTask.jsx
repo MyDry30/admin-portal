@@ -5,7 +5,7 @@ import { MdArrowBack, MdImage } from "react-icons/md";
 import Container from "../features/ui/container/Container";
 import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
-import { TextField } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material";
 import UploadButton from "../features/ui/uploadButton/UploadButton";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
@@ -21,6 +21,7 @@ const ContentManagementChallengeDayTask = () => {
 
 	const [task, setTask] = useState(null);
 
+	const [language, setLanguage] = useState("");
 	const [taskType, setTaskType] = useState("");
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
@@ -42,6 +43,7 @@ const ContentManagementChallengeDayTask = () => {
 			setTask(taskData);
 
 			if (taskData.type === "reading" || taskData.type === "journaling") {
+				setLanguage(taskData.language);
 				setTaskType(taskData.type);
 				setTitle(taskData.title);
 				setDescription(taskData.description);
@@ -50,6 +52,7 @@ const ContentManagementChallengeDayTask = () => {
 				setImage("");
 			}
 			if (taskData.type === "media") {
+				setLanguage(taskData.language);
 				setTaskType(taskData.type);
 				setTitle(taskData.title);
 				setDescription(taskData.description);
@@ -59,6 +62,7 @@ const ContentManagementChallengeDayTask = () => {
 				setFile("");
 			}
 			if (taskData.type === "questionnaire") {
+				setLanguage(taskData.language);
 				setTaskType(taskData.type);
 				setTitle(taskData.title);
 				setDescription(taskData.description);
@@ -89,6 +93,7 @@ const ContentManagementChallengeDayTask = () => {
 		let body = {};
 		if (taskType === "reading") {
 			body = {
+				language,
 				type: taskType,
 				title,
 				description,
@@ -97,6 +102,7 @@ const ContentManagementChallengeDayTask = () => {
 			};
 		} else if (taskType === "journaling") {
 			body = {
+				language,
 				type: taskType,
 				title,
 				description,
@@ -105,6 +111,7 @@ const ContentManagementChallengeDayTask = () => {
 			};
 		} else if (taskType === "media") {
 			body = {
+				language,
 				type: taskType,
 				title,
 				description,
@@ -112,6 +119,7 @@ const ContentManagementChallengeDayTask = () => {
 			};
 		} else if (taskType === "questionnaire") {
 			body = {
+				language,
 				type: taskType,
 				title,
 				description,
@@ -190,6 +198,21 @@ const ContentManagementChallengeDayTask = () => {
 										style={{ width: "400px" }}
 									>
 										<TextField
+											select
+											label="Language"
+											value={language || ""}
+											onChange={(e) =>
+												setLanguage(e.target.value)
+											}
+										>
+											<MenuItem key={1} value="English">
+												English
+											</MenuItem>
+											<MenuItem key={2} value="Spanish">
+												Spanish
+											</MenuItem>
+										</TextField>
+										<TextField
 											label="Title"
 											value={title}
 											onChange={(e) =>
@@ -228,6 +251,21 @@ const ContentManagementChallengeDayTask = () => {
 										className="flex-column row-gap-1"
 										style={{ width: "400px" }}
 									>
+										<TextField
+											select
+											label="Language"
+											value={language || ""}
+											onChange={(e) =>
+												setLanguage(e.target.value)
+											}
+										>
+											<MenuItem key={1} value="English">
+												English
+											</MenuItem>
+											<MenuItem key={2} value="Spanish">
+												Spanish
+											</MenuItem>
+										</TextField>
 										<TextField
 											label="Title"
 											value={title}
@@ -268,6 +306,21 @@ const ContentManagementChallengeDayTask = () => {
 										style={{ width: "400px" }}
 									>
 										<TextField
+											select
+											label="Language"
+											value={language || ""}
+											onChange={(e) =>
+												setLanguage(e.target.value)
+											}
+										>
+											<MenuItem key={1} value="English">
+												English
+											</MenuItem>
+											<MenuItem key={2} value="Spanish">
+												Spanish
+											</MenuItem>
+										</TextField>
+										<TextField
 											label="Title"
 											value={title}
 											onChange={(e) =>
@@ -300,6 +353,21 @@ const ContentManagementChallengeDayTask = () => {
 										className="flex-column row-gap-1"
 										style={{ width: "400px" }}
 									>
+										<TextField
+											select
+											label="Language"
+											value={language || ""}
+											onChange={(e) =>
+												setLanguage(e.target.value)
+											}
+										>
+											<MenuItem key={1} value="English">
+												English
+											</MenuItem>
+											<MenuItem key={2} value="Spanish">
+												Spanish
+											</MenuItem>
+										</TextField>
 										<TextField
 											label="Title"
 											value={title}
@@ -397,6 +465,12 @@ const ContentManagementChallengeDayTask = () => {
 											<p>{taskType}</p>
 										</div>
 										<div className="flex-column row-gap-05">
+											<p className="small-text">
+												Language
+											</p>
+											<p>{language}</p>
+										</div>
+										<div className="flex-column row-gap-05">
 											<p className="small-text">Title</p>
 											<p>{title}</p>
 										</div>
@@ -437,6 +511,12 @@ const ContentManagementChallengeDayTask = () => {
 												Task Type
 											</p>
 											<p>{taskType}</p>
+										</div>
+										<div className="flex-column row-gap-05">
+											<p className="small-text">
+												Language
+											</p>
+											<p>{language}</p>
 										</div>
 										<div className="flex-column row-gap-05">
 											<p className="small-text">Title</p>
@@ -481,6 +561,12 @@ const ContentManagementChallengeDayTask = () => {
 											<p>{taskType}</p>
 										</div>
 										<div className="flex-column row-gap-05">
+											<p className="small-text">
+												Language
+											</p>
+											<p>{language}</p>
+										</div>
+										<div className="flex-column row-gap-05">
 											<p className="small-text">Title</p>
 											<p>{title}</p>
 										</div>
@@ -519,6 +605,12 @@ const ContentManagementChallengeDayTask = () => {
 												Task Type
 											</p>
 											<p>{taskType}</p>
+										</div>
+										<div className="flex-column row-gap-05">
+											<p className="small-text">
+												Language
+											</p>
+											<p>{language}</p>
 										</div>
 										<div className="flex-column row-gap-05">
 											<p className="small-text">Title</p>

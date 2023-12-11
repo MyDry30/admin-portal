@@ -31,6 +31,7 @@ const ContentManagementDayAddTask = () => {
 
 	const [taskType, setTaskType] = useState("");
 	const [readingForm, setReadingForm] = useState({
+		language: "English",
 		title: "",
 		description: "",
 		timeToComplete: "",
@@ -38,6 +39,7 @@ const ContentManagementDayAddTask = () => {
 		image: "",
 	});
 	const [journalingForm, setJournalingForm] = useState({
+		language: "English",
 		title: "",
 		description: "",
 		timeToComplete: "",
@@ -45,6 +47,7 @@ const ContentManagementDayAddTask = () => {
 		image: "",
 	});
 	const [mediaForm, setMediaForm] = useState({
+		language: "English",
 		title: "",
 		description: "",
 		duration: "",
@@ -52,6 +55,7 @@ const ContentManagementDayAddTask = () => {
 		image: "",
 	});
 	const [questionForm, setQuestionForm] = useState({
+		language: "English",
 		title: "",
 		question: "",
 		answerOption1: "",
@@ -118,6 +122,7 @@ const ContentManagementDayAddTask = () => {
 					return alert("Error: Time to Complete is required.");
 				}
 				body = {
+					language: readingForm.language || "English",
 					type: "reading",
 					title: readingForm.title,
 					description: readingForm.description,
@@ -138,6 +143,7 @@ const ContentManagementDayAddTask = () => {
 					return alert("Error: Time to Complete is required.");
 				}
 				body = {
+					language: journalingForm.language || "English",
 					type: "journaling",
 					title: journalingForm.title,
 					description: journalingForm.description,
@@ -155,6 +161,7 @@ const ContentManagementDayAddTask = () => {
 					return alert("Error: Duration is required.");
 				}
 				body = {
+					language: mediaForm.language || "English",
 					type: "media",
 					title: mediaForm.title,
 					description: mediaForm.description,
@@ -186,6 +193,7 @@ const ContentManagementDayAddTask = () => {
 					return alert("Error: Duration is required.");
 				}
 				body = {
+					language: questionForm.language || "English",
 					type: "questionnaire",
 					title: questionForm.title,
 					description: questionForm.question,
@@ -281,6 +289,24 @@ const ContentManagementDayAddTask = () => {
 							{taskType === "reading" && (
 								<>
 									<TextField
+										select
+										label="Language"
+										value={readingForm.language || ""}
+										onChange={(e) =>
+											setReadingForm({
+												...readingForm,
+												language: e.target.value,
+											})
+										}
+									>
+										<MenuItem key={1} value="English">
+											English
+										</MenuItem>
+										<MenuItem key={2} value="Spanish">
+											Spanish
+										</MenuItem>
+									</TextField>
+									<TextField
 										label="Title"
 										value={readingForm.title}
 										onChange={(e) =>
@@ -330,6 +356,24 @@ const ContentManagementDayAddTask = () => {
 							)}
 							{taskType === "journaling" && (
 								<>
+									<TextField
+										select
+										label="Language"
+										value={journalingForm.language || ""}
+										onChange={(e) =>
+											setJournalingForm({
+												...journalingForm,
+												language: e.target.value,
+											})
+										}
+									>
+										<MenuItem key={1} value="English">
+											English
+										</MenuItem>
+										<MenuItem key={2} value="Spanish">
+											Spanish
+										</MenuItem>
+									</TextField>
 									<TextField
 										label="Title"
 										value={journalingForm.title}
@@ -381,6 +425,24 @@ const ContentManagementDayAddTask = () => {
 							{taskType === "media" && (
 								<>
 									<TextField
+										select
+										label="Language"
+										value={mediaForm.language || ""}
+										onChange={(e) =>
+											setMediaForm({
+												...mediaForm,
+												language: e.target.value,
+											})
+										}
+									>
+										<MenuItem key={1} value="English">
+											English
+										</MenuItem>
+										<MenuItem key={2} value="Spanish">
+											Spanish
+										</MenuItem>
+									</TextField>
+									<TextField
 										label="Title"
 										value={mediaForm.title}
 										onChange={(e) =>
@@ -422,6 +484,24 @@ const ContentManagementDayAddTask = () => {
 							)}
 							{taskType === "questionnaire" && (
 								<>
+									<TextField
+										select
+										label="Language"
+										value={questionForm.language || ""}
+										onChange={(e) =>
+											setQuestionForm({
+												...questionForm,
+												language: e.target.value,
+											})
+										}
+									>
+										<MenuItem key={1} value="English">
+											English
+										</MenuItem>
+										<MenuItem key={2} value="Spanish">
+											Spanish
+										</MenuItem>
+									</TextField>
 									<TextField
 										label="Title"
 										value={questionForm.title}
