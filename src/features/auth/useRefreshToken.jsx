@@ -7,7 +7,7 @@ const useRefreshToken = () => {
 
 	const refresh = async () => {
 		try {
-			const response = await axios.get("/auth/refresh");
+			const response = await axios.post("/auth/refresh");
 			dispatch(setUser({ ...response.data }));
 			return response?.data?.accessToken;
 		} catch (err) {
