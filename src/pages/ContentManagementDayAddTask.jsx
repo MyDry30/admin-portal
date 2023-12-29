@@ -99,6 +99,8 @@ const ContentManagementDayAddTask = () => {
 			timeToComplete: "",
 			duration: "",
 		});
+		setImageFile(null);
+		setMediaFile(null);
 	};
 
 	const addTask = async () => {

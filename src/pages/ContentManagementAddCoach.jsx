@@ -7,8 +7,13 @@ import Modal from "../features/ui/modal/Modal";
 import Button from "../features/ui/button/Button";
 import { MenuItem, TextField } from "@mui/material";
 import UploadButton from "../features/ui/uploadButton/UploadButton";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/app/authSlice";
+import uploadAsset from "../features/api/s3/uploadAsset";
+import addCoach from "../features/api/coaches/addCoach";
 
 const ContentManagementAddCoach = () => {
+	const user = useSelector(getUser);
 	const navigate = useNavigate();
 
 	const [firstName, setFirstName] = useState("");
@@ -16,15 +21,54 @@ const ContentManagementAddCoach = () => {
 	const [description, setDescription] = useState("");
 	const [link, setLink] = useState("");
 	const [status, setStatus] = useState("");
+	const [imageFile, setImageFile] = useState(null);
+
+	const handleUpload = async (file) => {
+		try {
+			const response = await uploadAsset(user.accessToken, file);
+			return response;
+		} catch (error) {
+			console.error("Error uploading file:", error);
+		}
+	};
+
+	const resetForm = () => {
+		setFirstName("");
+		setLastName("");
+		setDescription("");
+		setLink("");
+		setStatus("");
+		setImageFile(null);
+	};
 
 	const handleSaveButton = async () => {
-		if (!firstName) return alert("First Name is required.");
-		if (!lastName) return alert("Last Name is required.");
-		if (!description) return alert("Description is required.");
-		if (!link) return alert("Link is required.");
-		if (!status) return alert("Status is required.");
+		let body = {};
+		try {
+			if (!firstName) return alert("First Name is required.");
+			if (!lastName) return alert("Last Name is required.");
+			if (!description) return alert("Description is required.");
+			if (!link) return alert("Link is required.");
+			if (!status) return alert("Status is required.");
 
-		console.log("save form here");
+			body = {
+				firstName,
+				lastName,
+				description,
+				bookingsLink: link,
+				status,
+			};
+
+			if (imageFile) {
+				const response = await handleUpload(imageFile);
+				body.image = response.data;
+			}
+
+			await addCoach(user.accessToken, body);
+			alert("Coach has been added.");
+			resetForm();
+		} catch (err) {
+			console.warn(err.message);
+		}
 	};
 
 	return (
@@ -88,7 +132,10 @@ const ContentManagementAddCoach = () => {
 									Disabled
 								</MenuItem>
 							</TextField>
-							<UploadButton text="Add an Image" />
+							<UploadButton
+								text="Add an Image"
+								setSelectedFile={setImageFile}
+							/>
 						</div>
 					</div>
 				</Modal>
