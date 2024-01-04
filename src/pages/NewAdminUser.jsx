@@ -10,6 +10,14 @@ import addUser from "../features/api/users/addUser";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/app/authSlice";
 import { v4 as uuid } from "uuid";
+import sendEmail from "../features/api/sendEmail";
+import requestReset from "../features/api/requestReset";
+
+const isValidEmail = (email) => {
+	const atIndex = email.indexOf("@");
+	const dotIndex = email.lastIndexOf(".");
+	return atIndex !== -1 && dotIndex !== -1 && atIndex < dotIndex;
+};
 
 const NewAdminUser = () => {
 	const navigate = useNavigate();
@@ -31,6 +39,9 @@ const NewAdminUser = () => {
 		if (!email) {
 			return alert("Email is required.");
 		}
+		if (!isValidEmail(email)) {
+			return alert("Must be valid email.");
+		}
 		if (!phoneNumber) {
 			return alert("Phone Number is required.");
 		}
@@ -47,7 +58,15 @@ const NewAdminUser = () => {
 				password: uuid(),
 				role: "admin",
 			});
-			alert("New user has been created.");
+			const { data } = await requestReset(email);
+			await sendEmail({
+				email,
+				subject: "MyDry30: Admin Invitation",
+				message: `<p>Dear ${firstName} ${lastName},</p><p>You have been invited to create an admin account for MyDry30.</p><p><a href='https://staging-md30.tepia.dev/${data.resetLink}'>Click here to set your password</a></p><p>Best regards,</p><p>The MyDry30 Team</p>`,
+			});
+			alert(
+				`${firstName} ${lastName} has been invited via the following email: ${email}`
+			);
 			navigate("/admin-users/active");
 		} catch (err) {
 			console.log(err.message);
