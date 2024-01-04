@@ -7,6 +7,7 @@ import Button from "../features/ui/button/Button";
 import Logo from "../assets/logo.svg";
 import requestReset from "../features/api/requestReset";
 import sendResetEmail from "../features/api/sendResetEmail";
+import { PROD_URL } from "../constants";
 
 const PasswordReset = () => {
 	const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const PasswordReset = () => {
 
 			await sendResetEmail({
 				email,
-				resetLink: `https://mydry30-staging.netlify.app/${resetLink}`,
+				resetLink: `${PROD_URL}/${resetLink}`,
 			});
 
 			emailRef.current.value = "";

@@ -12,6 +12,7 @@ import { getUser } from "../features/app/authSlice";
 import { v4 as uuid } from "uuid";
 import sendEmail from "../features/api/sendEmail";
 import requestReset from "../features/api/requestReset";
+import { PROD_URL } from "../constants";
 
 const isValidEmail = (email) => {
 	const atIndex = email.indexOf("@");
@@ -62,7 +63,7 @@ const NewAdminUser = () => {
 			await sendEmail({
 				email,
 				subject: "MyDry30: Admin Invitation",
-				message: `<p>Dear ${firstName} ${lastName},</p><p>You have been invited to create an admin account for MyDry30.</p><p><a href='https://staging-md30.tepia.dev/${data.resetLink}'>Click here to set your password</a></p><p>Best regards,</p><p>The MyDry30 Team</p>`,
+				message: `<p>Dear ${firstName} ${lastName},</p><p>You have been invited to create an admin account for MyDry30.</p><p><a href='${PROD_URL}/${data.resetLink}'>Click here to set your password</a></p><p>Best regards,</p><p>The MyDry30 Team</p>`,
 			});
 			alert(
 				`${firstName} ${lastName} has been invited via the following email: ${email}`
